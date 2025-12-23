@@ -18,7 +18,7 @@ export const homePage: PageMetadata = {
   title: 'Miami SEO Services | Top-Rated SEO Agency in Miami',
   description: 'Expert SEO services in Miami with proven results. Dominate local search, increase traffic, and grow your business with our data-driven SEO strategies. Free audit available.',
   keywords: primaryKeywordString,
-  ogImage: '/images/og-default.jpg',
+  ogImage: '/images/og-default.png',
 };
 
 // Service-specific metadata
@@ -199,7 +199,7 @@ export const socialProfiles = {
 
 // Default OG images for different sections
 export const ogImages = {
-  default: '/images/og-default.jpg',
+  default: '/images/og-default.png',
   services: '/images/og-services.jpg',
   pricing: '/images/og-pricing.jpg',
   caseStudies: '/images/og-case-studies.jpg',
