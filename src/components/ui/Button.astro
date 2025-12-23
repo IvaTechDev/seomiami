@@ -1,0 +1,83 @@
+---
+/**
+ * Button Component
+ * 
+ * A versatile button component with multiple variants and sizes.
+ * Supports both anchor and button elements based on href prop.
+ * 
+ * @param {string} variant - Button style variant: 'primary', 'secondary', 'ghost'
+ * @param {string} size - Button size: 'sm', 'md', 'lg'
+ * @param {string} href - Optional URL for anchor element
+ * @param {string} class - Additional CSS classes
+ * @param {string} type - Button type: 'button', 'submit', 'reset' (only for button element)
+ */
+
+interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  class?: string;
+  type?: 'button' | 'submit' | 'reset';
+}
+
+const { 
+  variant = 'primary', 
+  size = 'md', 
+  href, 
+  class: className = '',
+  type = 'button'
+} = Astro.props;
+
+// Base styles
+const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-full transition-all duration-300 transform focus:outline-none focus:ring-2 focus:ring-miami-cyan focus:ring-offset-2 focus:ring-offset-miami-navy';
+
+// Size styles
+const sizeStyles = {
+  sm: 'px-4 py-2 text-sm',
+  md: 'px-8 py-4 text-base',
+  lg: 'px-10 py-5 text-lg'
+};
+
+// Variant styles
+const variantStyles = {
+  primary: 'bg-gradient-to-r from-miami-cyan to-miami-purple text-white hover:shadow-lg hover:shadow-miami-cyan/50 hover:scale-105 active:scale-95',
+  secondary: 'bg-white/10 backdrop-blur-sm border border-miami-cyan text-white hover:bg-miami-cyan hover:text-miami-navy hover:scale-105 active:scale-95',
+  ghost: 'text-miami-cyan hover:text-white hover:bg-white/5'
+};
+
+// Combine classes
+const buttonClasses = `${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`;
+
+// Render as anchor or button
+const Tag = href ? 'a' : 'button';
+const additionalProps = href 
+  ? { href } 
+  : { type };
+---
+
+<Tag class={buttonClasses} {...additionalProps}>
+  <slot />
+</Tag>
+
+<style>
+  /* Magnetic cursor effect on hover */
+  a, button {
+    position: relative;
+  }
+  
+  a:hover, button:hover {
+    animation: magneticPulse 0.3s ease-out;
+  }
+  
+  @keyframes magneticPulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1.05);
+    }
+  }
+</style>

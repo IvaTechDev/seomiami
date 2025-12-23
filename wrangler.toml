@@ -1,0 +1,58 @@
+# Cloudflare Workers Configuration for SEO Services Miami Contact Form
+# https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "seo-contact-form"
+main = "workers/contact-form/index.ts"
+compatibility_date = "2024-01-01"
+
+# Account ID (add your Cloudflare account ID here)
+# account_id = "your-account-id-here"
+
+# Worker settings
+workers_dev = true
+route = ""
+# For production, uncomment and set your route:
+# routes = [
+#   { pattern = "seoservicesmiami.com/api/contact", zone_name = "seoservicesmiami.com" }
+# ]
+
+# Environment variables
+# These will be set via wrangler secrets or dashboard
+[vars]
+FORM_SUBMISSION_EMAIL = "contact@seoservicesmiami.com"
+ALLOWED_ORIGIN = "https://seoservicesmiami.com"
+RATE_LIMIT_MAX = "5"
+RATE_LIMIT_WINDOW = "3600"
+
+# Secrets (use: wrangler secret put <KEY>)
+# - RESEND_API_KEY: Your Resend API key
+
+# KV Namespace for rate limiting (optional)
+# Uncomment and configure if using KV for distributed rate limiting
+# [[kv_namespaces]]
+# binding = "RATE_LIMITER_KV"
+# id = "your-kv-namespace-id"
+# preview_id = "your-preview-kv-namespace-id"
+
+# Development configuration
+[env.development]
+vars = { FORM_SUBMISSION_EMAIL = "dev@localhost", ALLOWED_ORIGIN = "http://localhost:4321" }
+
+# Production configuration
+[env.production]
+vars = { 
+  FORM_SUBMISSION_EMAIL = "contact@seoservicesmiami.com",
+  ALLOWED_ORIGIN = "https://seoservicesmiami.com"
+}
+# Production routes
+# routes = [
+#   { pattern = "seoservicesmiami.com/api/contact", zone_name = "seoservicesmiami.com" }
+# ]
+
+# Build configuration
+[build]
+command = ""
+
+# Observability
+[observability]
+enabled = true

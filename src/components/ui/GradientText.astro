@@ -1,0 +1,79 @@
+---
+/**
+ * GradientText Component
+ * 
+ * Apply Miami Nights gradient effect to text.
+ * Cyan to purple gradient for emphasis text in headings and CTAs.
+ * 
+ * @param {string} direction - Gradient direction: 'to-r', 'to-br', 'to-b', 'to-bl'
+ * @param {string} from - Starting gradient color (Tailwind class)
+ * @param {string} via - Middle gradient color (Tailwind class)
+ * @param {string} to - Ending gradient color (Tailwind class)
+ * @param {boolean} animate - Enable gradient animation
+ * @param {string} class - Additional CSS classes
+ */
+
+interface Props {
+  direction?: 'to-r' | 'to-br' | 'to-b' | 'to-bl' | 'to-l' | 'to-tr' | 'to-t' | 'to-tl';
+  from?: string;
+  via?: string;
+  to?: string;
+  animate?: boolean;
+  class?: string;
+}
+
+const { 
+  direction = 'to-r',
+  from = 'from-miami-cyan',
+  via = 'via-miami-purple',
+  to = 'to-miami-pink',
+  animate = false,
+  class: className = ''
+} = Astro.props;
+
+// Base gradient text styles
+const baseStyles = 'bg-clip-text text-transparent';
+
+// Gradient direction
+const gradientClasses = `bg-gradient-${direction} ${from} ${via} ${to}`;
+
+// Animation class
+const animateClass = animate ? 'animate-gradient' : '';
+
+// Combine classes
+const textClasses = `${baseStyles} ${gradientClasses} ${animateClass} ${className}`;
+---
+
+<span class={textClasses}>
+  <slot />
+</span>
+
+<style>
+  /* Ensure gradient text renders properly across browsers */
+  span {
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+  }
+  
+  /* Animated gradient effect */
+  .animate-gradient {
+    background-size: 200% auto;
+    animation: gradientShift 3s ease infinite;
+  }
+  
+  @keyframes gradientShift {
+    0%, 100% {
+      background-position: 0% center;
+    }
+    50% {
+      background-position: 100% center;
+    }
+  }
+  
+  /* Glow effect on hover */
+  span:hover {
+    filter: drop-shadow(0 0 8px rgba(0, 217, 255, 0.5));
+  }
+</style>

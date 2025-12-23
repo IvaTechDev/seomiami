@@ -1,0 +1,161 @@
+---
+/**
+ * Testimonials Section Component
+ * Displays client reviews with carousel
+ */
+
+import Section from '../ui/Section.astro';
+import Container from '../ui/Container.astro';
+import Heading from '../ui/Heading.astro';
+import Badge from '../ui/Badge.astro';
+import { Star, CheckCircle, Award, BarChart, ShieldCheck, Search, ThumbsUp } from 'lucide-react';
+import TestimonialCarousel from '../interactive/TestimonialCarousel.tsx';
+import { testimonials } from '../../data/testimonials';
+
+// Calculate average rating
+const averageRating = testimonials.reduce((acc, t) => acc + t.rating, 0) / testimonials.length;
+const totalReviews = testimonials.length;
+const averageRatingString = averageRating.toFixed(1);
+const totalReviewsString = totalReviews.toString();
+---
+
+<Section id="testimonials">
+  <Container>
+    <div class="text-center mb-16">
+      <Heading level="h2" as="h2" className="mb-4">
+        Trusted by <span class="text-miami-cyan">500+ Miami Businesses</span>
+      </Heading>
+      <p class="text-xl text-slate-300 max-w-3xl mx-auto mb-8">
+        Don't take our word for it – hear from our clients
+      </p>
+
+      {/* Review Stats */}
+      <div class="flex items-center justify-center gap-8 flex-wrap">
+        {/* Average Rating */}
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-1">
+            {Array.from({ length: 5 }, (_, i) => (
+              <Star
+                key={i}
+                size="24"
+                className={i < Math.floor(averageRating) ? 'text-yellow-400 fill-current' : 'text-slate-600'}
+              />
+            ))}
+          </div>
+          <span class="text-2xl font-bold text-white">{averageRatingString}</span>
+          <span class="text-slate-400">({totalReviewsString}+ reviews)</span>
+        </div>
+
+        {/* Verified Badge */}
+        <Badge variant="success" className="text-sm">
+          <CheckCircle size="36" />
+          Verified Reviews
+        </Badge>
+      </div>
+    </div>
+
+    {/* Testimonial Carousel */}
+    <div class="mb-16">
+      <!-- <TestimonialCarousel client:visible /> -->
+      <div class="text-center p-8 bg-miami-dark/40 rounded-xl border border-white/10">
+        <p class="text-gray-300">Testimonial Carousel - Temporarily disabled for SSR debugging</p>
+      </div>
+    </div>
+
+    {/* Trust Badges */}
+    <div class="border-t border-slate-700 pt-12">
+      <p class="text-center text-slate-400 uppercase tracking-wider text-sm mb-8">
+        Why Businesses Trust Us
+      </p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Google Certified Partner */}
+        <div class="flex flex-col items-center text-center p-6 rounded-xl bg-slate-800/30 backdrop-blur-sm border border-slate-700/50 hover:border-miami-cyan/50 transition-colors">
+          <div class="w-16 h-16 rounded-full bg-miami-cyan/20 flex items-center justify-center mb-4">
+            <Award className="text-miami-cyan" />
+          </div>
+          <h3 class="text-lg font-display font-bold text-white mb-2">
+            Google Certified Partner
+          </h3>
+          <p class="text-slate-400 text-sm">
+            Official Google Partner with proven expertise
+          </p>
+        </div>
+
+        {/* Transparent Reporting */}
+        <div class="flex flex-col items-center text-center p-6 rounded-xl bg-slate-800/30 backdrop-blur-sm border border-slate-700/50 hover:border-miami-purple/50 transition-colors">
+          <div class="w-16 h-16 rounded-full bg-miami-purple/20 flex items-center justify-center mb-4">
+            <BarChart className="text-miami-purple" />
+          </div>
+          <h3 class="text-lg font-display font-bold text-white mb-2">
+            Transparent Reporting
+          </h3>
+          <p class="text-slate-400 text-sm">
+            Weekly detailed reports with real-time data
+          </p>
+        </div>
+
+        {/* No Long-Term Contracts */}
+        <div class="flex flex-col items-center text-center p-6 rounded-xl bg-slate-800/30 backdrop-blur-sm border border-slate-700/50 hover:border-miami-pink/50 transition-colors">
+          <div class="w-16 h-16 rounded-full bg-miami-pink/20 flex items-center justify-center mb-4">
+            <ShieldCheck className="text-miami-pink" />
+          </div>
+          <h3 class="text-lg font-display font-bold text-white mb-2">
+            No Long-Term Contracts
+          </h3>
+          <p class="text-slate-400 text-sm">
+            Month-to-month service, stay because you want to
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {/* Review Platform Links */}
+    <div class="mt-12 text-center">
+      <p class="text-slate-400 mb-6">Read more reviews on:</p>
+      <div class="flex items-center justify-center gap-6 flex-wrap">
+        <a 
+          href="#" 
+          class="flex items-center gap-2 px-6 py-3 rounded-lg bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-miami-cyan/50 transition-all group"
+          aria-label="Read our Google reviews"
+        >
+          <Search size="36" className="text-slate-400 group-hover:text-miami-cyan transition-colors" />
+          <span class="text-white font-semibold">Google</span>
+          <div class="flex items-center gap-1">
+            {Array.from({ length: 5 }, (_, i) => (
+              <Star key={i} size="24" className="text-yellow-400 fill-current" />
+            ))}
+          </div>
+        </a>
+        
+        <a 
+          href="#" 
+          class="flex items-center gap-2 px-6 py-3 rounded-lg bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-miami-cyan/50 transition-all group"
+          aria-label="Read our Yelp reviews"
+        >
+          <Star size="36" className="text-slate-400 group-hover:text-miami-cyan transition-colors" />
+          <span class="text-white font-semibold">Yelp</span>
+          <div class="flex items-center gap-1">
+            {Array.from({ length: 5 }, (_, i) => (
+              <Star key={i} size="24" className="text-yellow-400 fill-current" />
+            ))}
+          </div>
+        </a>
+
+        <a 
+          href="#" 
+          class="flex items-center gap-2 px-6 py-3 rounded-lg bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-miami-cyan/50 transition-all group"
+          aria-label="Read our Clutch reviews"
+        >
+          <ThumbsUp size="36" className="text-slate-400 group-hover:text-miami-cyan transition-colors" />
+          <span class="text-white font-semibold">Clutch</span>
+          <div class="flex items-center gap-1">
+            {Array.from({ length: 5 }, (_, i) => (
+              <Star key={i} size="24" className="text-yellow-400 fill-current" />
+            ))}
+          </div>
+        </a>
+      </div>
+    </div>
+  </Container>
+</Section>

@@ -1,0 +1,371 @@
+---
+/**
+ * SchemaOrg Component
+ * 
+ * Generates structured data (JSON-LD) for rich search results
+ * Supports: ProfessionalService, FAQPage, BreadcrumbList, Review, Service, Organization
+ */
+
+export interface Props {
+  type: 'ProfessionalService' | 'FAQPage' | 'BreadcrumbList' | 'Review' | 'Service' | 'Organization' | 'All';
+  data?: any;
+}
+
+const { type, data = {} } = Astro.props;
+
+const SITE_URL = 'https://seoservicesmiami.com';
+
+// Organization Schema - Base schema used across multiple types
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${SITE_URL}/#organization`,
+  name: 'SEO Services Miami',
+  alternateName: 'Miami SEO Agency',
+  description: 'Premier SEO agency in Miami specializing in local SEO, e-commerce optimization, and technical SEO audits. Helping Miami businesses dominate search rankings since 2015.',
+  url: SITE_URL,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${SITE_URL}/images/logo.png`,
+    width: 250,
+    height: 60,
+  },
+  image: {
+    '@type': 'ImageObject',
+    url: `${SITE_URL}/images/og-default.jpg`,
+    width: 1200,
+    height: 630,
+  },
+  telephone: '+1-305-555-0123',
+  email: 'contact@seoservicesmiami.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '1450 Brickell Avenue, Suite 1800',
+    addressLocality: 'Miami',
+    addressRegion: 'FL',
+    postalCode: '33131',
+    addressCountry: 'US',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 25.7617,
+    longitude: -80.1918,
+  },
+  areaServed: [
+    {
+      '@type': 'City',
+      name: 'Miami',
+      '@id': 'https://www.wikidata.org/wiki/Q8652',
+    },
+    {
+      '@type': 'AdministrativeArea',
+      name: 'Miami-Dade County',
+    },
+    'Brickell',
+    'Wynwood',
+    'Coral Gables',
+    'Doral',
+    'Miami Beach',
+    'Downtown Miami',
+    'Coconut Grove',
+    'South Beach',
+  ],
+  priceRange: '$$',
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '5.0',
+    reviewCount: '524',
+    bestRating: '5',
+    worstRating: '1',
+  },
+  sameAs: [
+    'https://www.facebook.com/seoservicesmiami',
+    'https://www.twitter.com/seomiami',
+    'https://www.linkedin.com/company/seo-services-miami',
+    'https://www.instagram.com/seoservicesmiami',
+  ],
+  serviceType: 'SEO Services',
+  slogan: 'Dominate Miami Search Results',
+  foundingDate: '2015',
+  knowsAbout: [
+    'Search Engine Optimization',
+    'Local SEO',
+    'Technical SEO',
+    'E-commerce SEO',
+    'Content Marketing',
+    'Link Building',
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'SEO Services',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Local SEO Services',
+          description: 'Dominate Google Maps and local search results in Miami',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'E-commerce SEO',
+          description: 'Drive qualified traffic and increase online sales',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Technical SEO Audit',
+          description: 'Identify and fix critical SEO issues',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Content & Link Building',
+          description: 'Build authority with high-quality content and backlinks',
+        },
+      },
+    ],
+  },
+};
+
+// FAQ Schema
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is Local SEO and why is it important for Miami businesses?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Local SEO is the practice of optimizing your online presence to attract more business from relevant local searches on Google. For Miami businesses, it\'s crucial because 46% of all Google searches are looking for local information, and 76% of people who search for something nearby visit a business within 24 hours.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does it take to see SEO results?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Most businesses start seeing initial improvements in 3-4 months, with significant results typically appearing in 6-12 months. SEO is a long-term investment, but the results compound over time and provide sustainable growth.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What makes your Miami SEO agency different?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We specialize exclusively in the Miami market, understanding local competition, bilingual audiences, and neighborhood-specific strategies. Our team has deep roots in Miami and proven success across diverse industries in the region.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you offer SEO services in Spanish?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes! We provide bilingual SEO services in both English and Spanish, which is essential for reaching Miami\'s diverse market. Our team is fluent in both languages and understands the cultural nuances of Hispanic marketing.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is included in your SEO packages?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our packages include keyword research, on-page optimization, technical SEO audits, content creation, link building, Google Business Profile optimization, monthly reporting, and ongoing strategy refinement based on performance data.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do you measure SEO success?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We track keyword rankings, organic traffic growth, conversion rates, local pack visibility, Google Business Profile insights, backlink quality, and most importantly - your ROI and lead generation metrics.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can you help with Google My Business optimization?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Absolutely! Google Business Profile (formerly Google My Business) optimization is a core part of our local SEO strategy. We optimize your profile, manage reviews, create posts, and improve your visibility in the local pack.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What industries do you specialize in?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We have extensive experience with law firms, real estate agencies, medical practices, restaurants, e-commerce businesses, and professional services in Miami. Our strategies are customized for each industry\'s unique challenges.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you use white hat SEO techniques?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, we exclusively use white hat SEO techniques that comply with Google\'s guidelines. We focus on sustainable, long-term growth rather than risky shortcuts that could result in penalties.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is your pricing for SEO services?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our SEO packages start at $1,500/month for local businesses and scale up based on competition, goals, and scope. We offer custom quotes after a free initial consultation and SEO audit to understand your specific needs.',
+      },
+    },
+  ],
+};
+
+// Breadcrumb Schema
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: SITE_URL,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Services',
+      item: `${SITE_URL}/#services`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Pricing',
+      item: `${SITE_URL}/#pricing`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      name: 'Case Studies',
+      item: `${SITE_URL}/#case-studies`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 5,
+      name: 'Contact',
+      item: `${SITE_URL}/#contact`,
+    },
+  ],
+};
+
+// Review Schema (Sample testimonials)
+const reviewSchema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    itemReviewed: {
+      '@type': 'ProfessionalService',
+      name: 'SEO Services Miami',
+    },
+    author: {
+      '@type': 'Person',
+      name: 'Carlos Rodriguez',
+    },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: '5',
+      bestRating: '5',
+    },
+    reviewBody: 'Our restaurant online visibility increased by 300% in just 6 months. We went from page 3 to consistently ranking in the top 3 for our main keywords. The ROI has been incredible.',
+    datePublished: '2024-10-15',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    itemReviewed: {
+      '@type': 'ProfessionalService',
+      name: 'SEO Services Miami',
+    },
+    author: {
+      '@type': 'Person',
+      name: 'Jennifer Martinez',
+    },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: '5',
+      bestRating: '5',
+    },
+    reviewBody: 'Finally, an SEO agency that understands the Miami market. Their bilingual approach helped us reach both English and Spanish-speaking clients effectively.',
+    datePublished: '2024-11-02',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Review',
+    itemReviewed: {
+      '@type': 'ProfessionalService',
+      name: 'SEO Services Miami',
+    },
+    author: {
+      '@type': 'Person',
+      name: 'Michael Chen',
+    },
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: '5',
+      bestRating: '5',
+    },
+    reviewBody: 'The technical SEO audit they provided was incredibly detailed. They found issues our previous agency missed and our organic traffic tripled within 8 months.',
+    datePublished: '2024-09-20',
+  },
+];
+
+// Select which schema to render
+let schemaToRender: any = null;
+
+if (type === 'ProfessionalService' || type === 'Organization') {
+  schemaToRender = organizationSchema;
+} else if (type === 'FAQPage') {
+  schemaToRender = faqSchema;
+} else if (type === 'BreadcrumbList') {
+  schemaToRender = breadcrumbSchema;
+} else if (type === 'Review') {
+  schemaToRender = reviewSchema;
+} else if (type === 'All') {
+  // Render all schemas
+  schemaToRender = null; // Handle below
+}
+
+// Custom data override
+if (data && Object.keys(data).length > 0) {
+  schemaToRender = data;
+}
+---
+
+{type === 'All' ? (
+  <>
+    <!-- Organization/Professional Service Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+    
+    <!-- FAQ Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    
+    <!-- Breadcrumb Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    
+    <!-- Review Schemas -->
+    {reviewSchema.map((review) => (
+      <script type="application/ld+json" set:html={JSON.stringify(review)} />
+    ))}
+  </>
+) : schemaToRender ? (
+  Array.isArray(schemaToRender) ? (
+    schemaToRender.map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))
+  ) : (
+    <script type="application/ld+json" set:html={JSON.stringify(schemaToRender)} />
+  )
+) : null}

@@ -1,0 +1,30 @@
+# Robots.txt for SEO Services Miami
+# https://www.robotstxt.org/robotstxt.html
+
+# Allow all crawlers to access all content
+User-agent: *
+Allow: /
+
+# Disallow test pages and admin areas (if any)
+Disallow: /admin/
+Disallow: /test/
+Disallow: /*.json$
+Disallow: /api/
+
+# Allow Google Image bot specifically
+User-agent: Googlebot-Image
+Allow: /images/
+
+# Crawl-delay for slower bots (optional)
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Sitemap locations
+Sitemap: https://seoservicesmiami.com/sitemap-index.xml
+Sitemap: https://seoservicesmiami.com/sitemap.xml
+
+# Host declaration (optional for international sites)
+Host: https://seoservicesmiami.com

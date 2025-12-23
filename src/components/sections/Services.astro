@@ -1,0 +1,267 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Card from '../ui/Card.astro';
+import Badge from '../ui/Badge.astro';
+import { MapPin, ShoppingCart, Search, FileText, Link, Building, Check, ArrowRight, DollarSign, Clock, Zap, Target, HeartHandshake } from 'lucide-react';
+import Button from '../ui/Button.astro';
+
+const iconMap = {
+  MapPin,
+  ShoppingCart,
+  Search,
+  FileText,
+  Link,
+  Building,
+};
+
+const services = [
+  {
+    icon: 'MapPin',
+    title: 'Local SEO Domination',
+    description: 'Conquer \'near me\' searches and dominate the Miami-Dade Google Map Pack',
+    features: [
+      'Google Business optimization',
+      'Local citations & directories',
+      'Geo-targeted content strategy',
+    ],
+    badge: 'Most Popular',
+    badgeVariant: 'primary' as const,
+  },
+  {
+    icon: 'ShoppingCart',
+    title: 'E-commerce SEO',
+    description: 'Drive qualified traffic that converts into sales',
+    features: [
+      'Product page optimization',
+      'Technical SEO audits',
+      'Conversion rate tracking',
+    ],
+  },
+  {
+    icon: 'Search',
+    title: 'Technical SEO Audits',
+    description: 'Identify and fix issues killing your rankings',
+    features: [
+      'Core Web Vitals optimization',
+      'Structured data implementation',
+      'Mobile-first optimization',
+    ],
+  },
+  {
+    icon: 'FileText',
+    title: 'On-Page Optimization',
+    description: 'Content that ranks and converts',
+    features: [
+      'Comprehensive keyword research',
+      'Content strategy & planning',
+      'Meta tag optimization',
+    ],
+  },
+  {
+    icon: 'Link',
+    title: 'Link Building',
+    description: 'Authority links from Miami businesses and industry leaders',
+    features: [
+      'Local business outreach',
+      'Digital PR campaigns',
+      'Competitor backlink analysis',
+    ],
+  },
+  {
+    icon: 'Building',
+    title: 'Enterprise SEO',
+    description: 'Scalable strategies for large Miami corporations',
+    features: [
+      'Multi-location SEO',
+      'International targeting',
+      'Custom analytics dashboards',
+    ],
+    badge: 'Premium',
+    badgeVariant: 'secondary' as const,
+  },
+];
+---
+
+<Section
+  id="services"
+  className="relative bg-gradient-to-b from-miami-charcoal to-miami-navy"
+>
+  <!-- Decorative Background Elements -->
+  <div class="absolute inset-0 overflow-hidden opacity-30">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-miami-cyan/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-miami-purple/10 rounded-full blur-3xl"></div>
+  </div>
+
+  <Container className="relative z-10">
+    <!-- Section Header -->
+    <div class="text-center mb-16">
+      <Heading level="h2" className="mb-4">
+        Comprehensive SEO Services
+        <span class="block mt-2 bg-gradient-to-r from-miami-cyan to-miami-purple bg-clip-text text-transparent">
+          Built for Miami
+        </span>
+      </Heading>
+      <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+        Everything you need to dominate local search and drive qualified leads
+      </p>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+      {
+        services.map((service, index) => (
+          <Card
+            variant="glass-hover"
+            className="group scroll-reveal relative flex flex-col h-full"
+            style={`animation-delay: ${String(index * 0.1)}s;`}
+          >
+            {/* Badge */}
+            {service.badge && (
+              <div class="absolute top-4 right-4">
+                <Badge variant={service.badgeVariant}>
+                  {service.badge}
+                </Badge>
+              </div>
+            )}
+
+            {/* Icon */}
+            <div class="mb-6">
+              <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-miami-cyan/20 to-miami-purple/20 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                {(() => {
+                  const IconComponent = iconMap[service.icon] || MapPin;
+                  return <IconComponent className="w-6 h-6 text-miami-cyan group-hover:text-white transition-colors" />;
+                })()}
+              </div>
+            </div>
+
+            {/* Title */}
+            <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-miami-cyan group-hover:to-miami-purple group-hover:bg-clip-text transition-all duration-300">
+              {service.title}
+            </h3>
+
+            {/* Description */}
+            <p class="text-gray-400 mb-6 leading-relaxed flex-grow">
+              {service.description}
+            </p>
+
+            {/* Features List */}
+            <ul class="space-y-3">
+              {service.features.map((feature) => (
+                <li class="flex items-start gap-3 text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
+                  <Check className="w-5 h-5 text-miami-cyan flex-shrink-0 mt-0.5" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* Hover Glow Effect */}
+            <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-miami-cyan/0 to-miami-purple/0 group-hover:from-miami-cyan/5 group-hover:to-miami-purple/5 transition-all duration-300 pointer-events-none" />
+          </Card>
+        ))
+      }
+    </div>
+
+    <!-- Bottom CTA -->
+    <div class="text-center mt-16">
+      <div class="inline-flex flex-col items-center gap-6 p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10">
+        <p class="text-lg text-gray-300">
+          Not sure which service is right for you?
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <Button
+            variant="primary"
+            size="lg"
+            href="#contact"
+            className="group"
+          >
+            Get a Custom Strategy
+            <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            href="#pricing"
+          >
+            <DollarSign className="w-5 h-5 mr-2" />
+            View Pricing
+          </Button>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-gray-500">
+          <Clock className="w-4 h-4" />
+          <span>Free consultation • No obligations • Quick response</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Highlights -->
+    <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+      <div class="flex flex-col items-center">
+        <div class="w-12 h-12 rounded-full bg-miami-cyan/20 flex items-center justify-center mb-4">
+          <Zap className="w-6 h-6 text-miami-cyan" />
+        </div>
+        <h4 class="text-lg font-semibold text-white mb-2">Fast Implementation</h4>
+        <p class="text-sm text-gray-400">
+          See technical improvements within the first 30 days
+        </p>
+      </div>
+      <div class="flex flex-col items-center">
+        <div class="w-12 h-12 rounded-full bg-miami-purple/20 flex items-center justify-center mb-4">
+          <Target className="w-6 h-6 text-miami-purple" />
+        </div>
+        <h4 class="text-lg font-semibold text-white mb-2">Data-Driven Strategy</h4>
+        <p class="text-sm text-gray-400">
+          Every decision backed by analytics and market research
+        </p>
+      </div>
+      <div class="flex flex-col items-center">
+        <div class="w-12 h-12 rounded-full bg-miami-pink/20 flex items-center justify-center mb-4">
+          <HeartHandshake className="w-6 h-6 text-miami-pink" />
+        </div>
+        <h4 class="text-lg font-semibold text-white mb-2">Miami Expertise</h4>
+        <p class="text-sm text-gray-400">
+          Deep understanding of local market dynamics and competition
+        </p>
+      </div>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: revealService 0.8s ease-out forwards;
+  }
+
+  @keyframes revealService {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  // Intersection Observer for staggered animations
+  if (typeof window !== 'undefined') {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px',
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.scroll-reveal').forEach((el) => {
+      observer.observe(el);
+    });
+  }
+</script>

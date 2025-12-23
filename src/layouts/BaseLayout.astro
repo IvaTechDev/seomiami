@@ -1,0 +1,101 @@
+---
+import '@styles/global.css';
+import SEOHead from '@components/seo/SEOHead.astro';
+import SchemaOrg from '@components/seo/SchemaOrg.astro';
+import SkipLink from '@components/ui/SkipLink.astro';
+import Analytics from '@components/analytics/Analytics.astro';
+import { homePage } from '@/data/seo-metadata';
+
+interface Props {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  canonical?: string;
+  schemaType?: 'ProfessionalService' | 'FAQPage' | 'BreadcrumbList' | 'Review' | 'Service' | 'Organization' | 'All';
+}
+
+const {
+  title = homePage.title,
+  description = homePage.description,
+  keywords = homePage.keywords,
+  ogImage = homePage.ogImage,
+  noindex = false,
+  canonical,
+  schemaType = 'All',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Comprehensive SEO Meta Tags -->
+    <SEOHead
+      title={title}
+      description={description}
+      keywords={keywords}
+      image={ogImage}
+      canonical={canonical}
+      noindex={noindex}
+    />
+    
+    <!-- Structured Data (JSON-LD) -->
+    <SchemaOrg type={schemaType} />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    
+    <!-- DNS Prefetch & Preconnect for Performance -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Google Fonts with font-display: swap for Performance -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    
+    <!-- Inline Critical CSS for Above-the-Fold Content -->
+    <style>
+      /* Critical CSS - Inlined for faster FCP */
+      :root {
+        --primary-50: #eff6ff;
+        --primary-600: #2563eb;
+        --primary-700: #1d4ed8;
+      }
+      
+      body {
+        margin: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      
+      /* Prevent layout shift */
+      * {
+        box-sizing: border-box;
+      }
+    </style>
+    
+    <!-- Analytics -->
+    <Analytics />
+  </head>
+  <body>
+    <SkipLink />
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,245 @@
+---
+/**
+ * Footer Component
+ * Site footer with links, contact info, and legal
+ */
+
+import Container from '../ui/Container.astro';
+import { Phone, Mail, MapPin, ChevronRight, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+import GradientText from '../ui/GradientText.astro';
+
+const currentYear = new Date().getFullYear();
+
+const footerLinks = {
+  company: [
+    { label: 'About Us', href: '#about' },
+    { label: 'Our Process', href: '#process' },
+    { label: 'Case Studies', href: '#case-studies' },
+    { label: 'Blog', href: '#blog' },
+    { label: 'Contact', href: '#contact' },
+  ],
+  services: [
+    { label: 'Local SEO', href: '#services' },
+    { label: 'Technical SEO', href: '#services' },
+    { label: 'Content Marketing', href: '#services' },
+    { label: 'Link Building', href: '#services' },
+    { label: 'Miami Coverage', href: '#areas-served' },
+  ],
+  resources: [
+    { label: 'Pricing', href: '#pricing' },
+    { label: 'FAQ', href: '#faq' },
+    { label: 'Free Audit', href: '#contact' },
+    { label: 'ROI Calculator', href: '#roi-calculator' },
+    { label: 'Testimonials', href: '#testimonials' },
+  ],
+};
+
+const serviceAreas = [
+  'Brickell', 'Wynwood', 'Coral Gables', 'Miami Beach',
+  'Downtown', 'Coconut Grove', 'Doral', 'Design District',
+];
+
+const socialLinks = [
+  { name: 'Facebook', icon: 'facebook', href: '#' },
+  { name: 'Twitter', icon: 'twitter', href: '#' },
+  { name: 'LinkedIn', icon: 'linkedin', href: '#' },
+  { name: 'Instagram', icon: 'instagram', href: '#' },
+];
+---
+
+<footer class="relative bg-gradient-to-b from-miami-navy to-slate-950 border-t border-slate-800">
+  <Container>
+    {/* Main Footer Content */}
+    <div class="py-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        {/* Company Info */}
+        <div class="lg:col-span-1">
+          <div class="mb-6">
+            <GradientText className="text-2xl font-display font-bold">
+              SEO Services Miami
+            </GradientText>
+            <p class="text-slate-400 mt-3 text-sm leading-relaxed">
+              Miami's premier SEO agency helping local businesses dominate search results since 2010.
+            </p>
+          </div>
+
+          {/* Contact Info */}
+          <div class="space-y-3">
+            <a 
+              href="tel:+1-305-555-0123" 
+              class="flex items-center gap-3 text-slate-300 hover:text-miami-cyan transition-colors group"
+            >
+              <div class="w-8 h-8 rounded-lg bg-miami-cyan/10 flex items-center justify-center group-hover:bg-miami-cyan/20 transition-colors">
+                <Phone size="36" className="text-miami-cyan" />
+              </div>
+              <span class="text-sm">(305) 555-0123</span>
+            </a>
+
+            <a 
+              href="mailto:hello@seoservicesmiami.com" 
+              class="flex items-center gap-3 text-slate-300 hover:text-miami-cyan transition-colors group"
+            >
+              <div class="w-8 h-8 rounded-lg bg-miami-cyan/10 flex items-center justify-center group-hover:bg-miami-cyan/20 transition-colors">
+                <Mail size="36" className="text-miami-cyan" />
+              </div>
+              <span class="text-sm">hello@seoservicesmiami.com</span>
+            </a>
+
+            <div class="flex items-center gap-3 text-slate-400">
+              <div class="w-8 h-8 rounded-lg bg-miami-cyan/10 flex items-center justify-center">
+                <MapPin size="36" className="text-miami-cyan" />
+              </div>
+              <span class="text-sm">Miami, FL 33131</span>
+            </div>
+          </div>
+
+          {/* Social Links */}
+          <div class="mt-6 flex items-center gap-3">
+            {socialLinks.map((social) => (
+              <a
+                href={social.href}
+                aria-label={`Follow us on ${social.name}`}
+                class="w-10 h-10 rounded-lg bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 flex items-center justify-center text-slate-400 hover:text-miami-cyan hover:border-miami-cyan/50 hover:bg-slate-800 transition-all"
+              >
+                {(() => {
+                  const socialIcons = {
+                    facebook: Facebook,
+                    twitter: Twitter,
+                    linkedin: Linkedin,
+                    instagram: Instagram,
+                  };
+                  const SocialIcon = socialIcons[social.icon] || Facebook;
+                  return <SocialIcon size="36" />;
+                })()}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick Links - Company */}
+        <div>
+          <h3 class="text-white font-display font-bold mb-4">Company</h3>
+          <ul class="space-y-3">
+            {footerLinks.company.map((link) => (
+              <li>
+                <a 
+                  href={link.href}
+                  class="text-slate-400 hover:text-miami-cyan transition-colors text-sm flex items-center gap-2 group"
+                >
+                  <ChevronRight size="24" className="text-slate-600 group-hover:text-miami-cyan group-hover:translate-x-1 transition-all" />
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Quick Links - Services */}
+        <div>
+          <h3 class="text-white font-display font-bold mb-4">Services</h3>
+          <ul class="space-y-3">
+            {footerLinks.services.map((link) => (
+              <li>
+                <a 
+                  href={link.href}
+                  class="text-slate-400 hover:text-miami-cyan transition-colors text-sm flex items-center gap-2 group"
+                >
+                  <ChevronRight size="24" className="text-slate-600 group-hover:text-miami-cyan group-hover:translate-x-1 transition-all" />
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Quick Links - Resources */}
+        <div>
+          <h3 class="text-white font-display font-bold mb-4">Resources</h3>
+          <ul class="space-y-3">
+            {footerLinks.resources.map((link) => (
+              <li>
+                <a 
+                  href={link.href}
+                  class="text-slate-400 hover:text-miami-cyan transition-colors text-sm flex items-center gap-2 group"
+                >
+                  <ChevronRight size="24" className="text-slate-600 group-hover:text-miami-cyan group-hover:translate-x-1 transition-all" />
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* Service Areas */}
+      <div class="mt-12 pt-8 border-t border-slate-800">
+        <h3 class="text-white font-display font-bold mb-4 text-center">
+          Serving Miami-Dade County
+        </h3>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          {serviceAreas.map((area, index) => (
+            <Fragment>
+              <a 
+                href={`#${area.toLowerCase().replace(/\s+/g, '-')}`}
+                class="text-slate-400 hover:text-miami-cyan transition-colors text-sm"
+              >
+                {area}
+              </a>
+              {index < serviceAreas.length - 1 && (
+                <span class="text-slate-700">•</span>
+              )}
+            </Fragment>
+          ))}
+        </div>
+        <p class="text-center text-slate-500 text-sm mt-3">
+          And 40+ more Miami neighborhoods
+        </p>
+      </div>
+    </div>
+
+    {/* Bottom Bar */}
+    <div class="py-6 border-t border-slate-800">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* Copyright */}
+        <p class="text-slate-500 text-sm text-center md:text-left">
+          © {currentYear} SEO Services Miami. All rights reserved.
+        </p>
+
+        {/* Legal Links */}
+        <div class="flex items-center gap-6">
+          <a 
+            href="#privacy"
+            class="text-slate-500 hover:text-miami-cyan transition-colors text-sm"
+          >
+            Privacy Policy
+          </a>
+          <a 
+            href="#terms"
+            class="text-slate-500 hover:text-miami-cyan transition-colors text-sm"
+          >
+            Terms of Service
+          </a>
+          <a 
+            href="#sitemap"
+            class="text-slate-500 hover:text-miami-cyan transition-colors text-sm"
+          >
+            Sitemap
+          </a>
+        </div>
+      </div>
+
+      {/* Disclaimer */}
+      <p class="text-slate-600 text-xs text-center mt-6 max-w-4xl mx-auto leading-relaxed">
+        SEO Services Miami is an independent digital marketing agency. We are not affiliated with Google, Bing, or any search engine. 
+        Results vary based on competition, budget, and market conditions. All case studies represent actual client results but individual outcomes may differ.
+      </p>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  /* Smooth scroll behavior for footer links */
+  footer a[href^="#"] {
+    scroll-behavior: smooth;
+  }
+</style>

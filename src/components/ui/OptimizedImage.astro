@@ -1,0 +1,73 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  width: number;
+  height: number;
+  eager?: boolean;
+  class?: string;
+  quality?: number;
+  format?: 'avif' | 'webp' | 'png' | 'jpg';
+  loading?: 'lazy' | 'eager';
+  decoding?: 'async' | 'sync' | 'auto';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  eager = false,
+  class: className = '',
+  quality = 80,
+  format = 'webp',
+  loading = eager ? 'eager' : 'lazy',
+  decoding = 'async',
+  fetchpriority = eager ? 'high' : 'auto',
+} = Astro.props;
+
+// Calculate aspect ratio to prevent CLS
+const aspectRatio = `${width} / ${height}`;
+---
+
+{typeof src === 'string' ? (
+  <!-- External or public image URLs -->
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding={decoding}
+    fetchpriority={fetchpriority}
+    class={className}
+    style={`aspect-ratio: ${aspectRatio};`}
+  />
+) : (
+  <!-- Optimized local images with Astro Image -->
+  <Image
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    format={format}
+    quality={quality}
+    loading={loading}
+    decoding={decoding}
+    fetchpriority={fetchpriority}
+    class={className}
+    style={`aspect-ratio: ${aspectRatio};`}
+  />
+)}
+
+<style>
+  img {
+    /* Prevent layout shift */
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>

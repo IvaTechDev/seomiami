@@ -1,0 +1,212 @@
+{
+  "budgets": [
+    {
+      "path": "/*",
+      "timings": [
+        {
+          "metric": "first-contentful-paint",
+          "budget": 1800,
+          "tolerance": 200
+        },
+        {
+          "metric": "largest-contentful-paint",
+          "budget": 2500,
+          "tolerance": 300
+        },
+        {
+          "metric": "first-input-delay",
+          "budget": 100,
+          "tolerance": 20
+        },
+        {
+          "metric": "cumulative-layout-shift",
+          "budget": 0.1,
+          "tolerance": 0.05
+        },
+        {
+          "metric": "time-to-interactive",
+          "budget": 3800,
+          "tolerance": 500
+        },
+        {
+          "metric": "total-blocking-time",
+          "budget": 200,
+          "tolerance": 100
+        },
+        {
+          "metric": "speed-index",
+          "budget": 3000,
+          "tolerance": 500
+        }
+      ],
+      "resourceSizes": [
+        {
+          "resourceType": "script",
+          "budget": 300,
+          "tolerance": 50
+        },
+        {
+          "resourceType": "stylesheet",
+          "budget": 100,
+          "tolerance": 20
+        },
+        {
+          "resourceType": "image",
+          "budget": 500,
+          "tolerance": 100
+        },
+        {
+          "resourceType": "font",
+          "budget": 100,
+          "tolerance": 20
+        },
+        {
+          "resourceType": "document",
+          "budget": 50,
+          "tolerance": 10
+        },
+        {
+          "resourceType": "other",
+          "budget": 50,
+          "tolerance": 10
+        },
+        {
+          "resourceType": "total",
+          "budget": 1000,
+          "tolerance": 200
+        }
+      ],
+      "resourceCounts": [
+        {
+          "resourceType": "script",
+          "budget": 10,
+          "tolerance": 3
+        },
+        {
+          "resourceType": "stylesheet",
+          "budget": 5,
+          "tolerance": 2
+        },
+        {
+          "resourceType": "image",
+          "budget": 20,
+          "tolerance": 5
+        },
+        {
+          "resourceType": "font",
+          "budget": 3,
+          "tolerance": 1
+        },
+        {
+          "resourceType": "third-party",
+          "budget": 5,
+          "tolerance": 2
+        }
+      ]
+    }
+  ],
+  "lighthouseScores": {
+    "performance": {
+      "target": 100,
+      "minimum": 95
+    },
+    "accessibility": {
+      "target": 100,
+      "minimum": 100
+    },
+    "best-practices": {
+      "target": 100,
+      "minimum": 95
+    },
+    "seo": {
+      "target": 100,
+      "minimum": 100
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "frequency": "daily",
+    "alerts": {
+      "performance": {
+        "score": 90,
+        "lcp": 3000,
+        "fid": 150,
+        "cls": 0.15,
+        "fcp": 2000,
+        "tti": 4500,
+        "tbt": 300
+      },
+      "budgetExceeded": {
+        "javascript": 350,
+        "css": 120,
+        "images": 600,
+        "fonts": 120,
+        "total": 1200
+      }
+    },
+    "notifications": {
+      "email": true,
+      "slack": false,
+      "webhook": false
+    }
+  },
+  "coreWebVitals": {
+    "LCP": {
+      "good": 2500,
+      "needsImprovement": 4000,
+      "poor": 4001
+    },
+    "FID": {
+      "good": 100,
+      "needsImprovement": 300,
+      "poor": 301
+    },
+    "CLS": {
+      "good": 0.1,
+      "needsImprovement": 0.25,
+      "poor": 0.26
+    },
+    "FCP": {
+      "good": 1800,
+      "needsImprovement": 3000,
+      "poor": 3001
+    },
+    "TTI": {
+      "good": 3800,
+      "needsImprovement": 7300,
+      "poor": 7301
+    },
+    "TBT": {
+      "good": 200,
+      "needsImprovement": 600,
+      "poor": 601
+    },
+    "SI": {
+      "good": 3400,
+      "needsImprovement": 5800,
+      "poor": 5801
+    }
+  },
+  "notes": {
+    "description": "Performance budget for SEOSERVICESMIAMI.COM",
+    "version": "1.0.0",
+    "lastUpdated": "2024-12-22",
+    "targets": {
+      "lighthouse": "100/100 across all categories",
+      "coreWebVitals": "All metrics in 'good' range",
+      "pageSize": "< 1MB total page weight",
+      "requests": "< 50 total HTTP requests",
+      "javascript": "< 300KB total JavaScript",
+      "css": "< 100KB total CSS"
+    },
+    "strategy": {
+      "imageOptimization": "WebP/AVIF with lazy loading",
+      "codesplitting": "Manual chunks for vendor libraries",
+      "caching": "Aggressive caching with immutable assets",
+      "cdn": "Use CDN for static assets",
+      "compression": "Gzip/Brotli compression enabled",
+      "criticalCSS": "Inline critical CSS, defer non-critical",
+      "fonts": "Preload critical fonts, use font-display: swap"
+    }
+  }
+}

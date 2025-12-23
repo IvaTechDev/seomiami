@@ -1,0 +1,247 @@
+---
+import Button from '../ui/Button.astro';
+import { Sparkles, Menu, X, ArrowRight, Phone, Mail, MapPin } from 'lucide-react';
+import Container from '../ui/Container.astro';
+
+const navLinks = [
+  { label: 'Services', href: '#services' },
+  { label: 'Pricing', href: '#pricing' },
+  { label: 'Case Studies', href: '#case-studies' },
+  { label: 'About', href: '#about' },
+  { label: 'Contact', href: '#contact' },
+];
+---
+
+<header
+  id="navigation"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+  data-nav
+>
+  <Container class="py-8 md:py-8 lg:py-8">
+    <nav class="flex items-center justify-between md:py-2">
+      <!-- Logo -->
+      <a
+        href="/"
+        class="text-xl md:text-2xl font-bold bg-gradient-to-r from-miami-cyan via-miami-purple to-miami-pink bg-clip-text text-transparent hover:scale-105 transition-transform"
+      >
+        SEOSERVICESMIAMI.COM
+      </a>
+
+      <!-- Desktop Navigation -->
+      <ul class="hidden lg:flex items-center gap-8">
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="text-gray-300 hover:text-white transition-colors relative group py-2"
+              >
+                {link.label}
+                <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-miami-cyan to-miami-purple group-hover:w-full transition-all duration-300" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <!-- Desktop CTA -->
+      <div class="hidden lg:block">
+        <Button variant="primary" size="md" href="#contact" className="group">
+          Free Audit
+          <Sparkles className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform" />
+        </Button>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="mobile-menu-button"
+        class="lg:hidden p-2 text-gray-300 hover:text-white transition-colors"
+        aria-label="Toggle mobile menu"
+        aria-expanded="false"
+      >
+        <Menu className="w-6 h-6" id="menu-icon-open" />
+        <X className="w-6 h-6 hidden" id="menu-icon-close" />
+      </button>
+    </nav>
+  </Container>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-menu"
+    class="lg:hidden fixed inset-0 top-[72px] bg-miami-navy/95 backdrop-blur-xl transform translate-x-full transition-transform duration-300 overflow-y-auto"
+  >
+    <Container className="py-8">
+      <ul class="flex flex-col gap-6">
+        {
+          navLinks.map((link, index) => (
+            <li
+              class="opacity-0 translate-x-8 transition-all duration-300"
+              style={`transition-delay: ${index * 50}ms;`}
+              data-menu-item
+            >
+              <a
+                href={link.href}
+                class="block text-2xl font-semibold text-gray-300 hover:text-white hover:translate-x-2 transition-all"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <!-- Mobile CTA -->
+      <div
+        class="mt-8 opacity-0 translate-x-8 transition-all duration-300"
+        style="transition-delay: 250ms;"
+        data-menu-item
+      >
+        <Button variant="primary" size="lg" href="#contact" className="w-full group">
+          Get Your Free SEO Audit
+          <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+        </Button>
+      </div>
+
+      <!-- Mobile Contact Info -->
+      <div
+        class="mt-8 pt-8 border-t border-white/10 opacity-0 translate-x-8 transition-all duration-300"
+        style="transition-delay: 300ms;"
+        data-menu-item
+      >
+        <div class="flex flex-col gap-4 text-gray-400">
+          <div class="flex items-center gap-3">
+            <Phone className="w-5 h-5 text-miami-cyan" />
+            <span>(305) 555-RANK</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <Mail className="w-5 h-5 text-miami-purple" />
+            <span>hello@seoservicesmiami.com</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <MapPin className="w-5 h-5 text-miami-pink" />
+            <span>Miami, FL</span>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </div>
+</header>
+
+<style>
+  /* Initial state - transparent */
+  header[data-nav] {
+    background: transparent;
+  }
+
+  /* Scrolled state - solid background */
+  header[data-nav].scrolled {
+    background: rgba(10, 14, 39, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Active menu state */
+  #mobile-menu.active {
+    transform: translateX(0);
+  }
+
+  #mobile-menu.active [data-menu-item] {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  if (typeof window !== 'undefined') {
+    const nav = document.querySelector('[data-nav]') as HTMLElement;
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIconOpen = document.getElementById('menu-icon-open');
+    const menuIconClose = document.getElementById('menu-icon-close');
+    const menuLinks = document.querySelectorAll('#mobile-menu a');
+
+    // Handle scroll behavior
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+
+      if (currentScroll > 50) {
+        nav?.classList.add('scrolled');
+      } else {
+        nav?.classList.remove('scrolled');
+      }
+
+      lastScroll = currentScroll;
+    });
+
+    // Mobile menu toggle
+    mobileMenuButton?.addEventListener('click', () => {
+      const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+      
+      mobileMenuButton.setAttribute('aria-expanded', (!isExpanded).toString());
+      mobileMenu?.classList.toggle('active');
+      menuIconOpen?.classList.toggle('hidden');
+      menuIconClose?.classList.toggle('hidden');
+      
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = isExpanded ? '' : 'hidden';
+    });
+
+    // Close menu when clicking on a link
+    menuLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileMenu?.classList.remove('active');
+        mobileMenuButton?.setAttribute('aria-expanded', 'false');
+        menuIconOpen?.classList.remove('hidden');
+        menuIconClose?.classList.add('hidden');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href && href !== '#') {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            const navHeight = nav?.offsetHeight || 0;
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+            
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth',
+            });
+          }
+        }
+      });
+    });
+
+    // Highlight active section in navigation
+    const sections = document.querySelectorAll('section[id]');
+    const navLinkElements = document.querySelectorAll('nav a[href^="#"]');
+
+    const highlightNav = () => {
+      const scrollY = window.pageYOffset;
+
+      sections.forEach((section) => {
+        const sectionHeight = section.offsetHeight;
+        const sectionTop = (section as HTMLElement).offsetTop - 100;
+        const sectionId = section.getAttribute('id');
+
+        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+          navLinkElements.forEach((link) => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${sectionId}`) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    };
+
+    window.addEventListener('scroll', highlightNav);
+  }
+</script>

@@ -1,0 +1,122 @@
+---
+/**
+ * Section Component
+ * 
+ * Page section wrapper with proper spacing and backgrounds.
+ * Supports scroll reveal animations via data attributes.
+ * 
+ * @param {string} id - Section ID for anchor links
+ * @param {string} background - Background style: 'navy', 'charcoal', 'gradient', 'transparent'
+ * @param {boolean} fullWidth - Whether to use full width or contained layout
+ * @param {string} class - Additional CSS classes
+ */
+
+interface Props {
+  id?: string;
+  background?: 'navy' | 'charcoal' | 'gradient' | 'transparent';
+  fullWidth?: boolean;
+  class?: string;
+}
+
+const { 
+  id,
+  background = 'transparent',
+  fullWidth = false,
+  class: className = ''
+} = Astro.props;
+
+// Background styles
+const backgroundStyles = {
+  navy: 'bg-miami-navy',
+  charcoal: 'bg-miami-charcoal',
+  gradient: 'bg-gradient-to-b from-miami-navy via-miami-charcoal to-miami-navy',
+  transparent: ''
+};
+
+// Base styles
+const baseStyles = 'relative';
+
+// Width styles
+const widthStyles = fullWidth ? 'w-full' : '';
+
+// Combine classes
+const sectionClasses = `${baseStyles} ${backgroundStyles[background]} ${widthStyles} ${className}`;
+---
+
+<section 
+  id={id}
+  class={sectionClasses}
+  data-scroll-reveal
+>
+  <slot />
+</section>
+
+<style>
+  section {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Optional: Add decorative gradient overlay */
+  section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+      circle at 50% 0%,
+      rgba(0, 217, 255, 0.05) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  
+  section:hover::before {
+    opacity: 1;
+  }
+  
+  /* Scroll reveal animation support */
+  section[data-scroll-reveal] {
+    opacity: 1;
+  }
+  
+  section[data-scroll-reveal].hidden {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  
+  section[data-scroll-reveal].revealed {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+</style>
+
+<script>
+  // Intersection Observer for scroll reveal
+  if (typeof window !== 'undefined') {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          entry.target.classList.remove('hidden');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections with scroll reveal (but don't hide them)
+    document.querySelectorAll('[data-scroll-reveal]').forEach(section => {
+      // section.classList.add('hidden'); // REMOVED - don't hide sections
+      observer.observe(section);
+    });
+  }
+</script>

@@ -1,0 +1,185 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import Card from '../ui/Card.astro';
+import { Users, Award, Star, TrendingUp, CheckCircle, Shield, Lock } from 'lucide-react';
+---
+
+<Section
+  id="trust-bar"
+  className="relative bg-gradient-to-b from-miami-navy to-miami-charcoal border-t border-white/5"
+>
+  <Container>
+    <!-- Trust Bar Heading -->
+    <div class="text-center mb-12">
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">
+        Trusted by Leading Miami Brands
+      </h2>
+      <p class="text-gray-400">
+        Join hundreds of successful businesses growing with our SEO expertise
+      </p>
+    </div>
+
+    <!-- Client Logos Grid -->
+    <div class="mb-16">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-50 hover:opacity-70 transition-opacity">
+        {
+          Array.from({ length: 6 }).map((_, i) => (
+            <div class="relative w-32 h-20 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center group hover:bg-white/10 transition-all duration-300">
+              <div class="text-white/40 text-xs font-semibold group-hover:text-white/60 transition-colors">
+                CLIENT {String(i + 1)}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <p class="text-center text-xs text-gray-500 mt-8">
+        Client logos displayed with permission • More case studies available upon request
+      </p>
+    </div>
+
+    <!-- Trust Metrics -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <Card
+        variant="glass-hover"
+        className="text-center group scroll-reveal"
+        style="animation-delay: 0.1s;"
+      >
+        <div class="mb-4 flex justify-center">
+          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-miami-cyan/20 to-miami-purple/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <Users className="w-8 h-8 text-miami-cyan" />
+          </div>
+        </div>
+        <div class="text-4xl font-bold text-white mb-2 group-hover:text-miami-cyan transition-colors">
+          500+
+        </div>
+        <div class="text-sm text-gray-400 uppercase tracking-wide">
+          Miami Clients
+        </div>
+        <p class="text-xs text-gray-500 mt-2">
+          From startups to enterprises
+        </p>
+      </Card>
+
+      <Card
+        variant="glass-hover"
+        className="text-center group scroll-reveal"
+        style="animation-delay: 0.2s;"
+      >
+        <div class="mb-4 flex justify-center">
+          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-miami-purple/20 to-miami-pink/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <Award className="w-8 h-8 text-miami-purple" />
+          </div>
+        </div>
+        <div class="text-4xl font-bold text-white mb-2 group-hover:text-miami-purple transition-colors">
+          15+
+        </div>
+        <div class="text-sm text-gray-400 uppercase tracking-wide">
+          Years Experience
+        </div>
+        <p class="text-xs text-gray-500 mt-2">
+          Deep Miami market knowledge
+        </p>
+      </Card>
+
+      <Card
+        variant="glass-hover"
+        className="text-center group scroll-reveal"
+        style="animation-delay: 0.3s;"
+      >
+        <div class="mb-4 flex justify-center">
+          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <Star className="w-8 h-8 text-yellow-400 fill-yellow-400" />
+          </div>
+        </div>
+        <div class="text-4xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
+          5.0★
+        </div>
+        <div class="text-sm text-gray-400 uppercase tracking-wide">
+          Google Reviews
+        </div>
+        <p class="text-xs text-gray-500 mt-2">
+          Consistently rated excellent
+        </p>
+      </Card>
+
+      <Card
+        variant="glass-hover"
+        className="text-center group scroll-reveal"
+        style="animation-delay: 0.4s;"
+      >
+        <div class="mb-4 flex justify-center">
+          <div class="w-16 h-16 rounded-full bg-gradient-to-br from-miami-pink/20 to-miami-cyan/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+            <TrendingUp className="w-8 h-8 text-miami-pink" />
+          </div>
+        </div>
+        <div class="text-4xl font-bold text-white mb-2 group-hover:text-miami-pink transition-colors">
+          220%
+        </div>
+        <div class="text-sm text-gray-400 uppercase tracking-wide">
+          Average ROI
+        </div>
+        <p class="text-xs text-gray-500 mt-2">
+          Proven results that matter
+        </p>
+      </Card>
+    </div>
+
+    <!-- Additional Trust Elements -->
+    <div class="mt-12 text-center">
+      <div class="inline-flex items-center gap-6 px-8 py-4 rounded-full bg-white/5 border border-white/10">
+        <div class="flex items-center gap-2 text-sm text-gray-400">
+          <CheckCircle className="w-5 h-5 text-green-400" />
+          <span>Google Certified Partner</span>
+        </div>
+        <div class="w-px h-6 bg-white/10"></div>
+        <div class="flex items-center gap-2 text-sm text-gray-400">
+          <Shield className="w-5 h-5 text-miami-cyan" />
+          <span>100% Transparent Reporting</span>
+        </div>
+        <div class="w-px h-6 bg-white/10"></div>
+        <div class="flex items-center gap-2 text-sm text-gray-400">
+          <Lock className="w-5 h-5 text-miami-purple" />
+          <span>No Long-Term Contracts</span>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideInView 0.6s ease-out forwards;
+  }
+
+  @keyframes slideInView {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  // Intersection Observer for scroll animations
+  if (typeof window !== 'undefined') {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px',
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.scroll-reveal').forEach((el) => {
+      observer.observe(el);
+    });
+  }
+</script>

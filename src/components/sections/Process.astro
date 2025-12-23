@@ -1,0 +1,211 @@
+---
+/**
+ * Process Section Component
+ * Displays our 4-phase SEO process
+ */
+
+import Section from '../ui/Section.astro';
+import Container from '../ui/Container.astro';
+import Heading from '../ui/Heading.astro';
+import Card from '../ui/Card.astro';
+import { Search, Target, Zap, BarChart } from 'lucide-react';
+
+const iconMap = {
+  search: Search,
+  target: Target,
+  zap: Zap,
+  'bar-chart': BarChart,
+};
+
+const phases = [
+  {
+    number: 1,
+    title: 'Discovery & Audit',
+    icon: 'search',
+    description: 'Comprehensive technical audit, competitor analysis, keyword research',
+    timeline: 'Week 1-2',
+    color: 'miami-cyan',
+  },
+  {
+    number: 2,
+    title: 'Strategy Development',
+    icon: 'target',
+    description: 'Custom roadmap aligned with your business goals and Miami market',
+    timeline: 'Week 2-3',
+    color: 'miami-purple',
+  },
+  {
+    number: 3,
+    title: 'Implementation',
+    icon: 'zap',
+    description: 'On-page optimization, content creation, technical fixes, link building',
+    timeline: 'Week 3-12',
+    color: 'miami-pink',
+  },
+  {
+    number: 4,
+    title: 'Monitor & Optimize',
+    icon: 'bar-chart',
+    description: 'Weekly reporting, continuous optimization, transparent communication',
+    timeline: 'Ongoing',
+    color: 'miami-cyan',
+  },
+];
+---
+
+<Section id="process" className="relative overflow-hidden">
+  <!-- Background decoration -->
+  <div class="absolute inset-0 bg-gradient-to-b from-miami-navy/50 to-transparent pointer-events-none"></div>
+  
+  <Container className="relative z-10">
+    <div class="text-center mb-16">
+      <Heading level="h2" as="h2" className="mb-4">
+        Our Proven <span class="text-miami-cyan">4-Phase</span> SEO Process
+      </Heading>
+      <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+        Transparent methodology delivering consistent results
+      </p>
+    </div>
+
+    <!-- Desktop: Horizontal Timeline -->
+    <div class="hidden lg:block">
+      <div class="relative py-20">
+        <div class="grid grid-cols-4 gap-8">
+          {phases.map((phase, index) => (
+            <div class="relative">
+              {/* Number circles hidden on desktop */}
+              
+              <!-- Phase Card -->
+              <Card variant="glass" className="h-full hover:scale-105 transition-transform duration-300">
+                <div class="text-center mb-6">
+                  <div class={`
+                    inline-flex items-center justify-center 
+                    w-16 h-16 rounded-full 
+                    bg-${phase.color}/20 
+                    border border-${phase.color}/30
+                    mb-6
+                  `}>
+                    {(() => {
+                      const IconComponent = iconMap[phase.icon] || Search;
+                      return <IconComponent className={`text-${phase.color} w-4 h-4`} />;
+                    })()}
+                  </div>
+                  <h3 class="text-xl font-display font-bold text-white mb-2">
+                    {phase.title}
+                  </h3>
+                  <p class={`text-sm font-semibold text-${phase.color}`}>
+                    {phase.timeline}
+                  </p>
+                </div>
+                <p class="text-slate-300 text-center">
+                  {phase.description}
+                </p>
+              </Card>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile/Tablet: Vertical Timeline -->
+    <div class="lg:hidden space-y-20">
+      {phases.map((phase, index) => (
+        <div class="relative">
+          {/* Connecting Line (not for last item) */}
+          {index < phases.length - 1 && (
+            <div class={`
+              absolute left-10 top-28 bottom-[-6rem] w-1
+              bg-gradient-to-b from-${phase.color} to-${phases[index + 1].color}
+              opacity-30
+            `}></div>
+          )}
+
+          <div class="flex gap-12">
+            {/* Phase Number */}
+            <div class={`
+              flex-shrink-0 
+              w-20 h-20 rounded-full 
+              flex items-center justify-center 
+              text-2xl font-display font-bold 
+              bg-${phase.color}/20 
+              border-2 border-${phase.color} 
+              text-white
+              shadow-lg shadow-${phase.color}/50
+              z-20 relative mt-8
+            `}>
+              {String(phase.number)}
+            </div>
+
+            {/* Phase Card */}
+            <Card variant="glass" className="flex-1">
+              <div class="flex items-start gap-8 mb-10">
+                <div class={`
+                  flex-shrink-0
+                  inline-flex items-center justify-center 
+                  w-16 h-16 rounded-full 
+                  bg-${phase.color}/20 
+                  border border-${phase.color}/30
+                `}>
+                  {(() => {
+                    const IconComponent = iconMap[phase.icon] || Search;
+                    return <IconComponent className={`text-${phase.color} w-4 h-4`} />;
+                  })()}
+                </div>
+                <div class="flex-1 pt-4">
+                  <h3 class="text-xl font-display font-bold text-white mb-2">
+                    {phase.title}
+                  </h3>
+                  <p class={`text-sm font-semibold text-${phase.color}`}>
+                    {phase.timeline}
+                  </p>
+                </div>
+              </div>
+              <p class="text-slate-300">
+                {phase.description}
+              </p>
+            </Card>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Process Benefits -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <Card variant="glass" className="text-center">
+        <div class="text-4xl font-bold text-miami-cyan mb-2">100%</div>
+        <p class="text-slate-300">Transparent Methodology</p>
+      </Card>
+      <Card variant="glass" className="text-center">
+        <div class="text-4xl font-bold text-miami-purple mb-2">Weekly</div>
+        <p class="text-slate-300">Progress Updates</p>
+      </Card>
+      <Card variant="glass" className="text-center">
+        <div class="text-4xl font-bold text-miami-pink mb-2">Custom</div>
+        <p class="text-slate-300">Tailored Strategy</p>
+      </Card>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  /* CSS fallback for dynamic color classes */
+  .bg-miami-cyan\/20 { background-color: rgba(0, 217, 255, 0.2); }
+  .bg-miami-purple\/20 { background-color: rgba(157, 78, 221, 0.2); }
+  .bg-miami-pink\/20 { background-color: rgba(255, 0, 110, 0.2); }
+  
+  .border-miami-cyan { border-color: rgb(0, 217, 255); }
+  .border-miami-purple { border-color: rgb(157, 78, 221); }
+  .border-miami-pink { border-color: rgb(255, 0, 110); }
+  
+  .border-miami-cyan\/30 { border-color: rgba(0, 217, 255, 0.3); }
+  .border-miami-purple\/30 { border-color: rgba(157, 78, 221, 0.3); }
+  .border-miami-pink\/30 { border-color: rgba(255, 0, 110, 0.3); }
+  
+  .text-miami-cyan { color: rgb(0, 217, 255); }
+  .text-miami-purple { color: rgb(157, 78, 221); }
+  .text-miami-pink { color: rgb(255, 0, 110); }
+  
+  .shadow-miami-cyan\/50 { box-shadow: 0 10px 40px rgba(0, 217, 255, 0.5); }
+  .shadow-miami-purple\/50 { box-shadow: 0 10px 40px rgba(157, 78, 221, 0.5); }
+  .shadow-miami-pink\/50 { box-shadow: 0 10px 40px rgba(255, 0, 110, 0.5); }
+</style>

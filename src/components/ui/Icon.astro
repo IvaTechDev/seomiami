@@ -1,0 +1,99 @@
+---
+/**
+ * Icon Component
+ * 
+ * Wrapper for Lucide React icons with consistent sizing and styling.
+ * Note: This is a placeholder. In actual usage, import specific icons from lucide-react in React components.
+ * For Astro components, you can use this as a wrapper or use inline SVGs.
+ * 
+ * @param {string} name - Icon name from Lucide (for reference)
+ * @param {string} size - Icon size: 'sm', 'md', 'lg', 'xl'
+ * @param {string} color - Icon color (Tailwind class)
+ * @param {string} class - Additional CSS classes
+ * 
+ * Example usage in React components:
+ * import { ArrowRight } from 'lucide-react';
+ * <ArrowRight className="w-6 h-6 text-miami-cyan" />
+ */
+
+interface Props {
+  name?: string;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  color?: string;
+  class?: string;
+}
+
+const { 
+  name = '',
+  size = 'md',
+  color = 'text-miami-cyan',
+  class: className = ''
+} = Astro.props;
+
+// Size mappings
+const sizeStyles = {
+  sm: 'w-4 h-4',
+  md: 'w-6 h-6',
+  lg: 'w-8 h-8',
+  xl: 'w-12 h-12'
+};
+
+// Base styles
+const baseStyles = 'inline-block transition-all duration-300';
+
+// Combine classes
+const iconClasses = `${baseStyles} ${sizeStyles[size]} ${color} ${className}`;
+---
+
+<!-- 
+  This is a wrapper component for documentation purposes.
+  In practice, use Lucide React icons directly in React components,
+  or use inline SVGs in Astro components.
+  
+  React example:
+  import { Search, ArrowRight, Check } from 'lucide-react';
+  <Search className="w-6 h-6 text-miami-cyan" />
+-->
+
+<span class={iconClasses} data-icon={name}>
+  <slot />
+</span>
+
+<style>
+  span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  span:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Animation classes can be added */
+  span[data-animate="spin"] {
+    animation: spin 1s linear infinite;
+  }
+  
+  span[data-animate="pulse"] {
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+</style>

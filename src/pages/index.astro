@@ -1,0 +1,213 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Navigation from '@components/layout/Navigation.astro';
+import Footer from '@components/layout/Footer.astro';
+import Hero from '@components/sections/Hero.astro';
+import TrustBar from '@components/sections/TrustBar.astro';
+import Services from '@components/sections/Services.astro';
+import CaseStudies from '@components/sections/CaseStudies.astro';
+import Process from '@components/sections/Process.astro';
+import Testimonials from '@components/sections/Testimonials.astro';
+import Pricing from '@components/sections/Pricing.astro';
+import FAQ from '@components/sections/FAQ.astro';
+import AreasServed from '@components/sections/AreasServed.astro';
+import CTA from '@components/sections/CTA.astro';
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
+import Heading from '@components/ui/Heading.astro';
+import ROICalculator from '@components/interactive/ROICalculator.tsx';
+import ContactForm from '@components/interactive/ContactForm.tsx';
+import { homePage } from '@/data/seo-metadata';
+
+// SEO optimized metadata
+const pageTitle = homePage.title;
+const pageDescription = homePage.description;
+const pageKeywords = homePage.keywords;
+const ogImage = homePage.ogImage;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  keywords={pageKeywords}
+  ogImage={ogImage}
+  schemaType="All"
+>
+  <!-- Header with navigation -->
+  <header role="banner">
+    <Navigation />
+  </header>
+  
+  <!-- Main content with semantic structure -->
+  <main id="main-content" class="overflow-x-hidden" role="main">
+    <!-- Above the Fold Sections -->
+    <Hero />
+    <TrustBar />
+    <Services />
+
+    <!-- ROI Calculator Section (Interactive Tool) -->
+    <Section id="roi-calculator" variant="dark">
+      <Container>
+        <header class="text-center mb-12">
+          <Heading level="h2" as="h2" className="mb-4">
+            Calculate Your <span class="text-miami-cyan">SEO ROI</span>
+          </Heading>
+          <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+            See how much revenue you could generate with strategic SEO investment
+          </p>
+        </header>
+        <article class="flex items-center justify-center lazy-section" aria-label="ROI Calculator Tool">
+          <div class="w-full">
+            <ROICalculator client:visible />
+          </div>
+        </article>
+      </Container>
+    </Section>
+
+    <!-- Case Studies Section -->
+    <CaseStudies />
+
+    <!-- Process Section -->
+    <Process />
+
+    <!-- Testimonials Section -->
+    <Testimonials />
+
+    <!-- Pricing Section -->
+    <Pricing />
+
+    <!-- FAQ Section -->
+    <FAQ />
+
+    <!-- Areas Served Section -->
+    <AreasServed />
+
+    <!-- Final CTA Section -->
+    <CTA />
+
+    <!-- Contact Form Section -->
+    <Section id="contact" variant="dark">
+      <Container>
+        <header class="text-center mb-12">
+          <Heading level="h2" as="h2" className="mb-4">
+            Get Your Free <span class="text-miami-cyan">SEO Audit</span>
+          </Heading>
+          <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+            Ready to dominate Miami search results? Let's talk.
+          </p>
+        </header>
+        <article class="flex items-center justify-center lazy-section" aria-label="Contact Form">
+          <div class="w-full max-w-2xl">
+            <ContactForm client:visible />
+          </div>
+        </article>
+      </Container>
+    </Section>
+  </main>
+
+  <!-- Footer with contact information and links -->
+  <footer role="contentinfo">
+    <Footer />
+  </footer>
+</BaseLayout>
+
+<style>
+  /* VISIBILITY FIXES - Ensure content shows on scroll */
+  html, body {
+    background: #0A0E27 !important; /* Miami navy background */
+    color: white !important;
+    scroll-behavior: smooth !important;
+  }
+
+  main {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: transparent !important;
+  }
+
+  section {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    margin: 2rem 0 !important;
+    padding: 3rem 0 !important;
+    min-height: 50vh !important;
+  }
+
+  /* Clean up any remaining scroll-reveal issues */
+  section {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  /* Ensure good section spacing and visibility */
+  section {
+    background: rgba(255, 255, 255, 0.05) !important;
+    margin: 2rem 0 !important;
+    padding: 3rem 0 !important;
+    min-height: 50vh !important;
+  }
+
+  /* Make sure text is visible */
+  h1, h2, h3, h4, h5, h6, p, div, span {
+    color: white !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* Fix gradient text that might be invisible */
+  .bg-clip-text {
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    background-image: linear-gradient(135deg, #00D9FF, #9D4EDD, #FF006E) !important;
+    color: transparent !important;
+  }
+
+  /* TrustBar specific fixes */
+  #trust-bar {
+    background: rgba(0, 217, 255, 0.1) !important;
+    border-top: 1px solid rgba(0, 217, 255, 0.2) !important;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2) !important;
+  }
+
+  /* Services section */
+  #services {
+    background: rgba(157, 78, 221, 0.1) !important;
+  }
+
+  /* Other sections with distinct backgrounds */
+  #case-studies {
+    background: rgba(255, 0, 110, 0.1) !important;
+  }
+
+  #process {
+    background: rgba(0, 217, 255, 0.05) !important;
+  }
+
+  #testimonials {
+    background: rgba(157, 78, 221, 0.05) !important;
+  }
+
+  #pricing {
+    background: rgba(255, 0, 110, 0.05) !important;
+  }
+
+  #faq {
+    background: rgba(0, 217, 255, 0.1) !important;
+  }
+
+  #areas-served {
+    background: rgba(157, 78, 221, 0.1) !important;
+  }
+
+  #final-cta {
+    background: rgba(255, 0, 110, 0.1) !important;
+  }
+
+  #contact {
+    background: rgba(0, 217, 255, 0.1) !important;
+  }
+</style>

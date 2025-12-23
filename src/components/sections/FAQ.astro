@@ -1,0 +1,188 @@
+---
+/**
+ * FAQ Section Component
+ * Frequently Asked Questions with accordion functionality
+ */
+
+import Section from '../ui/Section.astro';
+import Container from '../ui/Container.astro';
+import Heading from '../ui/Heading.astro';
+import Card from '../ui/Card.astro';
+
+const faqs = [
+  {
+    id: 'faq-1',
+    question: 'How long does SEO take to work?',
+    answer: 'SEO is a long-term investment. While some technical wins happen quickly (like site speed improvements), significant ranking growth typically takes 3-6 months. However, most of our Miami clients start seeing meaningful traffic increases within the first 90 days as we optimize their Google Business Profile and target local keywords.',
+  },
+  {
+    id: 'faq-2',
+    question: 'Do you require long-term contracts?',
+    answer: 'No. We offer month-to-month service with no long-term contracts. We believe you should stay with us because you\'re seeing results, not because you\'re locked into a contract. You can cancel anytime with 30 days notice.',
+  },
+  {
+    id: 'faq-3',
+    question: 'What makes Miami SEO different?',
+    answer: 'Miami has a unique market with bilingual search patterns (English/Spanish), diverse demographics, and intense local competition. We understand the nuances of ranking in neighborhoods like Brickell, Wynwood, and Coral Gables. Our team lives and works in Miami, giving us insider knowledge that out-of-state agencies simply don\'t have.',
+  },
+  {
+    id: 'faq-4',
+    question: 'How do you measure success?',
+    answer: 'We focus on metrics that matter to your business: organic traffic growth, ranking improvements for target keywords, lead generation, and ultimately ROI. You\'ll receive transparent weekly reports showing exactly how your investment is performing. We track rankings, traffic, conversions, and revenue attribution.',
+  },
+  {
+    id: 'faq-5',
+    question: 'Do you guarantee first-page rankings?',
+    answer: 'No ethical SEO agency can guarantee specific rankings, as Google\'s algorithm is constantly evolving. However, we do offer a 90-day guarantee: if you don\'t see measurable improvements in traffic and rankings within 90 days, we\'ll refund your investment. Our average client achieves first-page rankings for multiple keywords within 6 months.',
+  },
+  {
+    id: 'faq-6',
+    question: 'What industries do you work with?',
+    answer: 'We work with businesses across all industries including restaurants, real estate, healthcare, legal services, e-commerce, hospitality, and professional services. Our team has specialized experience in competitive Miami markets like luxury real estate in Brickell and food & dining in Wynwood.',
+  },
+  {
+    id: 'faq-7',
+    question: 'Can you help with e-commerce SEO?',
+    answer: 'Absolutely. Our Enterprise package includes advanced e-commerce SEO strategies: product page optimization, category architecture, technical SEO for large catalogs, and strategic content marketing. We\'ve helped Miami-based e-commerce businesses scale from local to national markets.',
+  },
+  {
+    id: 'faq-8',
+    question: 'Do you offer bilingual SEO (English/Spanish)?',
+    answer: 'Yes! Miami\'s bilingual market is one of our specialties. We provide bilingual keyword research, Spanish content creation, and hreflang implementation to capture both English and Spanish-speaking audiences. This is crucial for businesses in neighborhoods like Little Havana, Hialeah, and West Miami.',
+  },
+  {
+    id: 'faq-9',
+    question: 'What\'s included in the free audit?',
+    answer: 'Our free audit includes: comprehensive technical SEO analysis, competitor benchmarking, keyword opportunity assessment, Google Business Profile review, backlink profile analysis, and a custom roadmap with prioritized recommendations. You\'ll receive a detailed PDF report and a 30-minute strategy call with our team.',
+  },
+  {
+    id: 'faq-10',
+    question: 'How often will I receive reports?',
+    answer: 'All plans include weekly email updates with key metrics. Starter plans receive detailed monthly reports, Growth plans get bi-weekly deep dives, and Enterprise clients receive custom reporting dashboards with real-time data access. You\'ll always know exactly what we\'re working on and the results we\'re achieving.',
+  },
+];
+---
+
+<Section id="faq">
+  <Container>
+    <div class="text-center mb-16">
+      <Heading level="h2" as="h2" className="mb-4">
+        Frequently Asked <span class="text-miami-cyan">Questions</span>
+      </Heading>
+      <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+        Everything you need to know about our SEO services
+      </p>
+    </div>
+
+    {/* FAQ Grid */}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {faqs.map((faq, index) => (
+        <Card variant="glass" className="faq-item">
+          <details class="group">
+            <summary class="flex items-start justify-between cursor-pointer list-none">
+              <div class="flex-1">
+                <h3 class="text-lg font-display font-bold text-white mb-2 pr-4 group-open:text-miami-cyan transition-colors">
+                  {faq.question}
+                </h3>
+              </div>
+              <div class="flex-shrink-0 w-6 h-6 rounded-full bg-miami-cyan/20 flex items-center justify-center text-miami-cyan group-open:rotate-45 transition-transform">
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  width="16" 
+                  height="16" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  stroke-width="2" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </div>
+            </summary>
+            <div class="mt-4 pt-4 border-t border-slate-700/50">
+              <p class="text-slate-300 leading-relaxed">
+                {faq.answer}
+              </p>
+            </div>
+          </details>
+        </Card>
+      ))}
+    </div>
+
+    {/* Still Have Questions CTA */}
+    <div class="mt-16 text-center">
+      <Card variant="glass" className="inline-block px-8 py-6">
+        <h3 class="text-xl font-display font-bold text-white mb-2">
+          Still have questions?
+        </h3>
+        <p class="text-slate-300 mb-4">
+          Schedule a free consultation with our team
+        </p>
+        <a 
+          href="#contact"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-miami-cyan to-miami-purple text-white font-semibold hover:shadow-lg hover:shadow-miami-cyan/50 transition-all"
+        >
+          Get Your Free Audit
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            stroke-width="2" 
+            stroke-linecap="round" 
+            stroke-linejoin="round"
+            class="group-hover:translate-x-1 transition-transform"
+          >
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </Card>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  /* Smooth accordion animation */
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details > summary {
+    transition: all 0.3s ease;
+  }
+
+  details[open] > summary {
+    margin-bottom: 0;
+  }
+
+  /* Fade in animation for answer */
+  details[open] div {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Hover effect */
+  .faq-item:hover {
+    border-color: rgba(0, 217, 255, 0.3);
+  }
+
+  details[open] {
+    border-color: rgba(0, 217, 255, 0.5);
+  }
+</style>

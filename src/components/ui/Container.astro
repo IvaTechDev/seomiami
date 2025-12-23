@@ -1,0 +1,40 @@
+---
+/**
+ * Container Component
+ * 
+ * Content width container with responsive max-width and padding.
+ * Centers content with proper margins.
+ * 
+ * @param {string} size - Max-width size: 'sm', 'md', 'lg', 'xl', 'full'
+ * @param {string} class - Additional CSS classes
+ */
+
+interface Props {
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  class?: string;
+}
+
+const { 
+  size = 'lg',
+  class: className = ''
+} = Astro.props;
+
+// Base styles - centered with padding
+const baseStyles = 'mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24';
+
+// Size styles (max-width)
+const sizeStyles = {
+  sm: 'max-w-2xl',     // 672px
+  md: 'max-w-4xl',     // 896px
+  lg: 'max-w-7xl',     // 1280px
+  xl: 'max-w-[1440px]', // 1440px
+  full: 'max-w-full'
+};
+
+// Combine classes
+const containerClasses = `${baseStyles} ${sizeStyles[size]} ${className}`;
+---
+
+<div class={containerClasses}>
+  <slot />
+</div>

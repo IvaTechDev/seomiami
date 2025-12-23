@@ -1,0 +1,256 @@
+---
+/**
+ * Pricing Section Component
+ * Displays pricing packages with transparent pricing
+ */
+
+import Section from '../ui/Section.astro';
+import Container from '../ui/Container.astro';
+import Heading from '../ui/Heading.astro';
+import Card from '../ui/Card.astro';
+import Badge from '../ui/Badge.astro';
+import Button from '../ui/Button.astro';
+import { Check, ArrowRight, BarChart, ShieldCheck, Award, MapPin } from 'lucide-react';
+
+const pricingTiers = [
+  {
+    name: 'Starter',
+    price: '$1,500',
+    period: '/month',
+    badge: 'Best for Small Business',
+    featured: false,
+    features: [
+      'Local SEO optimization',
+      'Google Business Profile optimization',
+      '10 target keywords',
+      'Monthly reporting & analytics',
+      'On-page SEO optimization',
+      'Basic competitor analysis',
+      'Monthly strategy call',
+    ],
+    idealFor: 'Cafes, retail stores, service businesses',
+    cta: 'Get Started',
+  },
+  {
+    name: 'Growth',
+    price: '$3,500',
+    period: '/month',
+    badge: 'Most Popular',
+    featured: true,
+    features: [
+      'Everything in Starter, plus:',
+      '25 target keywords',
+      'Content creation (4 blog posts/month)',
+      'Strategic link building',
+      'Bi-weekly strategy calls',
+      'Advanced technical SEO',
+      'Conversion rate optimization',
+      'Local citation building',
+    ],
+    idealFor: 'Multi-location businesses, competitive industries',
+    cta: 'Get Started',
+  },
+  {
+    name: 'Enterprise',
+    price: 'Custom',
+    period: 'pricing',
+    badge: 'Premium',
+    featured: false,
+    features: [
+      'Everything in Growth, plus:',
+      'Unlimited keywords',
+      'Dedicated account manager',
+      'Custom content strategy',
+      '24/7 priority support',
+      'Advanced analytics & BI',
+      'Multi-location management',
+      'White-label reporting',
+    ],
+    idealFor: 'Large corporations, e-commerce, multiple locations',
+    cta: 'Contact Sales',
+  },
+];
+
+const commonFeatures = [
+  { text: 'Transparent reporting', icon: 'bar-chart' },
+  { text: 'No long-term contracts', icon: 'shield-check' },
+  { text: '90-day guarantee', icon: 'award' },
+  { text: 'Miami-focused strategy', icon: 'map-pin' },
+];
+---
+
+<Section id="pricing">
+  <Container>
+    <div class="text-center mb-16">
+      <Heading level="h2" as="h2" className="mb-4">
+        Transparent Pricing. <span class="text-miami-cyan">No Hidden Fees.</span>
+      </Heading>
+      <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+        Choose the package that fits your business goals
+      </p>
+    </div>
+
+    {/* Pricing Grid */}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+      {pricingTiers.map((tier) => (
+        <Card 
+          variant="glass"
+          className={`
+            relative flex flex-col h-full
+            ${tier.featured ? 'lg:scale-105 lg:shadow-2xl lg:shadow-miami-purple/20 border-2 border-miami-purple' : ''}
+            hover:scale-105 transition-transform duration-300
+          `}
+        >
+          {/* Featured Glow Effect */}
+          {tier.featured && (
+            <div class="absolute -inset-1 bg-gradient-to-r from-miami-purple via-miami-cyan to-miami-purple rounded-2xl opacity-20 blur-xl animate-glow"></div>
+          )}
+
+          <div class="relative z-10">
+            {/* Badge */}
+            <div class="mb-6">
+              <Badge 
+                variant={tier.featured ? 'gradient' : 'outline'}
+                className="mb-4"
+              >
+                {tier.badge}
+              </Badge>
+              <h3 class="text-3xl font-display font-bold text-white mb-2">
+                {tier.name}
+              </h3>
+            </div>
+
+            {/* Price */}
+            <div class="mb-8">
+              <div class="flex items-baseline gap-2">
+                <span class={`
+                  text-5xl font-display font-bold
+                  ${tier.featured ? 'text-transparent bg-clip-text bg-gradient-to-r from-miami-cyan to-miami-purple' : 'text-white'}
+                `}>
+                  {tier.price}
+                </span>
+                <span class="text-slate-400 text-lg">
+                  {tier.period}
+                </span>
+              </div>
+            </div>
+
+            {/* Features */}
+            <div class="mb-8 space-y-4 flex-grow">
+              {tier.features.map((feature) => (
+                <div class="flex items-start gap-3">
+                  <div class={`
+                    flex-shrink-0 w-5 h-5 rounded-full 
+                    ${feature.startsWith('Everything') ? 'bg-miami-purple/20' : 'bg-miami-cyan/20'} 
+                    flex items-center justify-center mt-0.5
+                  `}>
+                    <Check 
+                      size="24"
+                      className={feature.startsWith('Everything') ? 'text-miami-purple' : 'text-miami-cyan'}
+                    />
+                  </div>
+                  <span class={`
+                    ${feature.startsWith('Everything') ? 'text-white font-semibold' : 'text-slate-300'}
+                  `}>
+                    {feature}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Ideal For */}
+            <div class="mb-6 p-4 rounded-lg bg-gradient-to-r from-miami-navy/50 to-slate-800/50 border border-slate-700/50">
+              <p class="text-xs text-slate-400 uppercase tracking-wide mb-1">Ideal for:</p>
+              <p class="text-sm text-white">{tier.idealFor}</p>
+            </div>
+
+            {/* CTA Button */}
+            <Button 
+              href={tier.name === 'Enterprise' ? '#contact' : '#free-audit'}
+              variant={tier.featured ? 'primary' : 'outline'}
+              size="lg"
+              className="w-full group"
+            >
+              {tier.cta}
+              <ArrowRight 
+                size="24"
+                className="group-hover:translate-x-1 transition-transform"
+              />
+            </Button>
+          </div>
+        </Card>
+      ))}
+    </div>
+
+    {/* Common Features */}
+    <div class="border-t border-slate-700 pt-12">
+      <p class="text-center text-slate-400 uppercase tracking-wider text-sm mb-8">
+        Included with All Plans
+      </p>
+      
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {commonFeatures.map((feature) => (
+          <div class="flex flex-col items-center text-center p-4">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-miami-cyan/20 to-miami-purple/20 flex items-center justify-center mb-3">
+              {(() => {
+                const featureIcons = {
+                  'bar-chart': BarChart,
+                  'shield-check': ShieldCheck,
+                  'award': Award,
+                  'map-pin': MapPin,
+                };
+                const FeatureIcon = featureIcons[feature.icon] || Check;
+                return <FeatureIcon size="72" className="text-miami-cyan" />;
+              })()}
+            </div>
+            <p class="text-sm text-slate-300">{feature.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Money-Back Guarantee */}
+    <div class="mt-12 text-center">
+      <Card variant="glass" className="inline-block px-8 py-6">
+        <div class="flex items-center gap-4">
+          <div class="w-20 h-20 rounded-full bg-gradient-to-br from-miami-cyan/20 to-miami-purple/20 flex items-center justify-center">
+            <ShieldCheck size="48" className="text-miami-cyan" />
+          </div>
+          <div class="text-left">
+            <h3 class="text-xl font-display font-bold text-white mb-1">
+              90-Day Money-Back Guarantee
+            </h3>
+            <p class="text-slate-300">
+              Not seeing results? We'll refund your investment. No questions asked.
+            </p>
+          </div>
+        </div>
+      </Card>
+    </div>
+
+    {/* FAQ Link */}
+    <div class="mt-8 text-center">
+      <p class="text-slate-400">
+        Questions about pricing? 
+        <a href="#faq" class="text-miami-cyan hover:text-miami-purple transition-colors ml-2">
+          Check our FAQ →
+        </a>
+      </p>
+    </div>
+  </Container>
+</Section>
+
+<style>
+  @keyframes glow {
+    0%, 100% {
+      opacity: 0.2;
+    }
+    50% {
+      opacity: 0.4;
+    }
+  }
+
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite;
+  }
+</style>

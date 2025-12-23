@@ -1,0 +1,66 @@
+---
+/**
+ * Analytics Component
+ * - Placeholder for analytics script (Google Analytics, Plausible, etc.)
+ * - Deferred loading to not impact performance
+ * - Web Vitals tracking
+ * - GDPR-compliant setup
+ */
+
+const isProd = import.meta.env.PROD;
+const analyticsId = import.meta.env.PUBLIC_ANALYTICS_ID || '';
+---
+
+{isProd && analyticsId && (
+  <>
+    <!-- Web Vitals Tracking Script -->
+    <script>
+      // Track Core Web Vitals
+      function sendToAnalytics(metric) {
+        const body = JSON.stringify({
+          name: metric.name,
+          value: metric.value,
+          rating: metric.rating,
+          delta: metric.delta,
+          id: metric.id,
+        });
+        
+        // Use sendBeacon if available, otherwise fallback to fetch
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon('/api/vitals', body);
+        }
+      }
+
+      // Dynamically import web-vitals for performance monitoring
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          import('web-vitals').then(({ onCLS, onFID, onLCP, onFCP, onTTFB }) => {
+            onCLS(sendToAnalytics);
+            onFID(sendToAnalytics);
+            onLCP(sendToAnalytics);
+            onFCP(sendToAnalytics);
+            onTTFB(sendToAnalytics);
+          });
+        });
+      }
+    </script>
+
+    <!-- Analytics Script (Deferred for Performance) -->
+    <script type="module" defer>
+      // Add your analytics provider here
+      // Example: Google Analytics, Plausible, Fathom, etc.
+      
+      // Respect user's Do Not Track preference
+      if (navigator.doNotTrack !== '1') {
+        // Initialize analytics here
+        console.log('Analytics initialized (production)');
+      }
+    </script>
+  </>
+)}
+
+{!isProd && (
+  <script>
+    console.log('Analytics disabled in development mode');
+  </script>
+)}

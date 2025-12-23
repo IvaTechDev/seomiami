@@ -1,0 +1,60 @@
+---
+/**
+ * Badge Component
+ * 
+ * Small pill-shaped badges for labels and tags.
+ * Used for labels like "Best Value", "Popular", "New", etc.
+ * 
+ * @param {string} variant - Badge color variant: 'primary', 'secondary', 'success', 'warning'
+ * @param {string} size - Badge size: 'sm', 'md', 'lg'
+ * @param {string} class - Additional CSS classes
+ */
+
+interface Props {
+  variant?: 'primary' | 'secondary' | 'success' | 'warning';
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const { 
+  variant = 'primary', 
+  size = 'md',
+  class: className = ''
+} = Astro.props;
+
+// Base styles
+const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-full whitespace-nowrap';
+
+// Size styles
+const sizeStyles = {
+  sm: 'px-2 py-0.5 text-xs',
+  md: 'px-3 py-1 text-sm',
+  lg: 'px-4 py-1.5 text-base'
+};
+
+// Variant styles
+const variantStyles = {
+  primary: 'bg-gradient-to-r from-miami-cyan to-miami-purple text-white shadow-lg shadow-miami-cyan/30',
+  secondary: 'bg-white/10 border border-miami-cyan/50 text-miami-cyan backdrop-blur-sm',
+  success: 'bg-green-500/20 border border-green-500/50 text-green-400 backdrop-blur-sm',
+  warning: 'bg-miami-pink/20 border border-miami-pink/50 text-miami-pink backdrop-blur-sm'
+};
+
+// Combine classes
+const badgeClasses = `${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`;
+---
+
+<span class={badgeClasses}>
+  <slot />
+</span>
+
+<style>
+  span {
+    position: relative;
+    transition: transform 0.2s ease;
+  }
+  
+  span:hover {
+    transform: scale(1.05);
+  }
+</style>
