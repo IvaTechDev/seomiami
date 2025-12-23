@@ -14,6 +14,7 @@ export interface ContactFormData {
   budget?: string;
   message: string;
   honeypot?: string;
+  turnstileToken: string;
 }
 
 /**
@@ -164,6 +165,7 @@ export function validateAndSanitizeFormData(data: any): ContactFormData {
     budget: data.budget ? sanitizeString(data.budget) : undefined,
     message: sanitizeString(data.message),
     honeypot: data.honeypot,
+    turnstileToken: data.turnstileToken ? sanitizeString(data.turnstileToken) : '',
   };
 
   // Validate name
@@ -204,6 +206,11 @@ export function validateAndSanitizeFormData(data: any): ContactFormData {
   // Check honeypot
   if (!checkHoneypot(sanitizedData.honeypot)) {
     throw new ValidationError('Invalid submission detected', 'honeypot');
+  }
+
+  // Validate Turnstile token
+  if (!sanitizedData.turnstileToken || sanitizedData.turnstileToken.trim() === '') {
+    throw new ValidationError('CAPTCHA verification required', 'turnstileToken');
   }
 
   return sanitizedData;

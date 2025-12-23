@@ -10,6 +10,7 @@ interface FormData {
   message: string;
   budget: string;
   honeypot: string; // spam protection
+  turnstileToken: string; // CAPTCHA token
 }
 
 interface FormErrors {
@@ -33,6 +34,7 @@ export default function ContactForm() {
     message: '',
     budget: '',
     honeypot: '',
+    turnstileToken: '',
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -118,13 +120,20 @@ export default function ContactForm() {
       return;
     }
 
+    // Get Turnstile token
+    const turnstileToken = (document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement)?.value;
+    if (!turnstileToken) {
+      setSubmitStatus('error');
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
     try {
       // Submit to Cloudflare Worker endpoint
       const endpoint = import.meta.env.PUBLIC_CONTACT_FORM_API || '/api/contact';
-      
+
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -139,6 +148,7 @@ export default function ContactForm() {
           budget: formData.budget,
           message: formData.message,
           honeypot: formData.honeypot,
+          turnstileToken,
         }),
       });
 
@@ -161,6 +171,7 @@ export default function ContactForm() {
           message: '',
           budget: '',
           honeypot: '',
+          turnstileToken: '',
         });
         setSubmitStatus('idle');
       }, 3000);
@@ -369,6 +380,15 @@ export default function ContactForm() {
                 {errors.message}
               </motion.p>
             )}
+          </div>
+
+          {/* Cloudflare Turnstile CAPTCHA */}
+          <div className="flex justify-center">
+            <div
+              className="cf-turnstile"
+              data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}
+              data-theme="dark"
+            ></div>
           </div>
 
           {/* Honeypot (hidden spam protection) */}

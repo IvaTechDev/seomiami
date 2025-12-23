@@ -30,6 +30,7 @@ interface Env {
   RATE_LIMIT_MAX?: string;
   RATE_LIMIT_WINDOW?: string;
   RATE_LIMITER_KV?: any; // KVNamespace if available
+  TURNSTILE_SECRET_KEY: string;
 }
 
 // Success response interface
@@ -106,6 +107,30 @@ async function sendEmail(
 }
 
 /**
+ * Verify Cloudflare Turnstile token
+ */
+async function verifyTurnstileToken(token: string, secret: string): Promise<boolean> {
+  try {
+    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        secret,
+        response: token,
+      }),
+    });
+
+    const result = await response.json();
+    return result.success === true;
+  } catch (error) {
+    console.error('Turnstile verification error:', error);
+    return false;
+  }
+}
+
+/**
  * Process contact form submission
  */
 async function handleContactForm(
@@ -149,6 +174,12 @@ async function handleContactForm(
 
     // Validate and sanitize form data
     const formData: ContactFormData = validateAndSanitizeFormData(requestData);
+
+    // Verify Turnstile token
+    const isValidToken = await verifyTurnstileToken(formData.turnstileToken, env.TURNSTILE_SECRET_KEY);
+    if (!isValidToken) {
+      throw new ContactFormError('CAPTCHA verification failed', 400);
+    }
 
     // Prepare email metadata
     const metadata = {

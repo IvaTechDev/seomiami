@@ -3,7 +3,7 @@
 
 name = "seo-contact-form"
 main = "workers/contact-form/index.ts"
-compatibility_date = "2024-01-01"
+compatibility_date = "2025-01-01"
 
 # Account ID (add your Cloudflare account ID here)
 # account_id = "your-account-id-here"
@@ -12,9 +12,7 @@ compatibility_date = "2024-01-01"
 workers_dev = true
 route = ""
 # For production, uncomment and set your route:
-# routes = [
-#   { pattern = "seoservicesmiami.com/api/contact", zone_name = "seoservicesmiami.com" }
-# ]
+routes = [ { pattern = "seoservicesmiami.com/api/contact", zone_name = "seoservicesmiami.com" } ]
 
 # Environment variables
 # These will be set via wrangler secrets or dashboard
@@ -36,18 +34,13 @@ RATE_LIMIT_WINDOW = "3600"
 
 # Development configuration
 [env.development]
-vars = { FORM_SUBMISSION_EMAIL = "dev@localhost", ALLOWED_ORIGIN = "http://localhost:4321" }
+vars = { FORM_SUBMISSION_EMAIL = "dev@seo.kr.ua", ALLOWED_ORIGIN = "http://localhost:4321" }
 
 # Production configuration
 [env.production]
-vars = { 
-  FORM_SUBMISSION_EMAIL = "contact@seoservicesmiami.com",
-  ALLOWED_ORIGIN = "https://seoservicesmiami.com"
-}
+vars = { FORM_SUBMISSION_EMAIL = "info@seo.kr.ua", ALLOWED_ORIGIN = "https://seoservicesmiami.com"}
 # Production routes
-# routes = [
-#   { pattern = "seoservicesmiami.com/api/contact", zone_name = "seoservicesmiami.com" }
-# ]
+routes = [ { pattern = "seoservicesmiami.com/api/contact", zone_name = "seoservicesmiami.com" } ]
 
 # Build configuration
 [build]
