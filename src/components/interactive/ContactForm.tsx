@@ -1,5 +1,13 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: HTMLElement, options: { sitekey: string; theme: string }) => void;
+    };
+  }
+}
 
 interface FormData {
   name: string;
@@ -41,6 +49,32 @@ export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const shouldReduceMotion = useReducedMotion();
+  const turnstileRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+    if (!siteKey || !turnstileRef.current) return;
+
+    const renderWidget = () => {
+      if (window.turnstile && turnstileRef.current) {
+        window.turnstile.render(turnstileRef.current, {
+          sitekey: siteKey,
+          theme: 'dark',
+        });
+      }
+    };
+
+    if (window.turnstile) {
+      renderWidget();
+    } else {
+      const script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      script.async = true;
+      script.defer = true;
+      script.onload = renderWidget;
+      document.head.appendChild(script);
+    }
+  }, []);
 
   // Validation helpers
   const validateEmail = (email: string): boolean => {
@@ -85,7 +119,7 @@ export default function ContactForm() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    
+
     // Clear error for this field
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
@@ -96,13 +130,13 @@ export default function ContactForm() {
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, '');
     let formatted = value;
-    
+
     if (value.length >= 6) {
       formatted = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
     } else if (value.length >= 3) {
       formatted = `(${value.slice(0, 3)}) ${value.slice(3)}`;
     }
-    
+
     setFormData((prev) => ({ ...prev, phone: formatted }));
   };
 
@@ -121,7 +155,9 @@ export default function ContactForm() {
     }
 
     // Get Turnstile token
-    const turnstileToken = (document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement)?.value;
+    const turnstileToken = (
+      document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement
+    )?.value;
     if (!turnstileToken) {
       setSubmitStatus('error');
       return;
@@ -159,7 +195,7 @@ export default function ContactForm() {
       }
 
       setSubmitStatus('success');
-      
+
       // Reset form after success
       setTimeout(() => {
         setFormData({
@@ -184,17 +220,17 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto" id="contact">
+    <div className="mx-auto w-full max-w-2xl" id="contact">
       <motion.form
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: shouldReduceMotion ? 0 : 0.5 }}
         onSubmit={handleSubmit}
-        className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-miami-dark/80 to-miami-dark/60 backdrop-blur-xl border border-white/10 shadow-2xl"
+        className="from-miami-dark/80 to-miami-dark/60 rounded-2xl border border-white/10 bg-gradient-to-br p-6 shadow-2xl backdrop-blur-xl md:p-8"
       >
         {/* Header */}
-        <div className="text-center mb-8">
-          <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
+        <div className="mb-8 text-center">
+          <h3 className="mb-2 text-2xl font-bold text-white md:text-3xl">
             Get Your Free SEO Audit
           </h3>
           <p className="text-gray-300">
@@ -205,7 +241,7 @@ export default function ContactForm() {
         <div className="space-y-5">
           {/* Name */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-200 mb-2">
+            <label htmlFor="name" className="mb-2 block text-sm font-medium text-gray-200">
               Name <span className="text-miami-pink">*</span>
             </label>
             <input
@@ -214,9 +250,9 @@ export default function ContactForm() {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className={`w-full px-4 py-3 rounded-xl bg-miami-dark/60 border ${
+              className={`bg-miami-dark/60 w-full rounded-xl border px-4 py-3 ${
                 errors.name ? 'border-red-500' : 'border-white/20'
-              } text-white placeholder-gray-500 focus:outline-none focus:border-miami-cyan transition-colors`}
+              } text-white placeholder-gray-500 transition-colors focus:border-miami-cyan focus:outline-none`}
               placeholder="John Doe"
               aria-invalid={!!errors.name}
               aria-describedby={errors.name ? 'name-error' : undefined}
@@ -235,7 +271,7 @@ export default function ContactForm() {
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-2">
+            <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-200">
               Email <span className="text-miami-pink">*</span>
             </label>
             <input
@@ -244,9 +280,9 @@ export default function ContactForm() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={`w-full px-4 py-3 rounded-xl bg-miami-dark/60 border ${
+              className={`bg-miami-dark/60 w-full rounded-xl border px-4 py-3 ${
                 errors.email ? 'border-red-500' : 'border-white/20'
-              } text-white placeholder-gray-500 focus:outline-none focus:border-miami-cyan transition-colors`}
+              } text-white placeholder-gray-500 transition-colors focus:border-miami-cyan focus:outline-none`}
               placeholder="john@example.com"
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? 'email-error' : undefined}
@@ -265,7 +301,7 @@ export default function ContactForm() {
 
           {/* Phone */}
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-200 mb-2">
+            <label htmlFor="phone" className="mb-2 block text-sm font-medium text-gray-200">
               Phone (optional)
             </label>
             <input
@@ -274,9 +310,9 @@ export default function ContactForm() {
               name="phone"
               value={formData.phone}
               onChange={handlePhoneChange}
-              className={`w-full px-4 py-3 rounded-xl bg-miami-dark/60 border ${
+              className={`bg-miami-dark/60 w-full rounded-xl border px-4 py-3 ${
                 errors.phone ? 'border-red-500' : 'border-white/20'
-              } text-white placeholder-gray-500 focus:outline-none focus:border-miami-cyan transition-colors`}
+              } text-white placeholder-gray-500 transition-colors focus:border-miami-cyan focus:outline-none`}
               placeholder="(305) 555-0123"
               aria-invalid={!!errors.phone}
               aria-describedby={errors.phone ? 'phone-error' : undefined}
@@ -295,7 +331,7 @@ export default function ContactForm() {
 
           {/* Website URL */}
           <div>
-            <label htmlFor="website" className="block text-sm font-medium text-gray-200 mb-2">
+            <label htmlFor="website" className="mb-2 block text-sm font-medium text-gray-200">
               Business Website (optional)
             </label>
             <input
@@ -304,14 +340,14 @@ export default function ContactForm() {
               name="website"
               value={formData.website}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl bg-miami-dark/60 border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-miami-cyan transition-colors"
+              className="bg-miami-dark/60 w-full rounded-xl border border-white/20 px-4 py-3 text-white placeholder-gray-500 transition-colors focus:border-miami-cyan focus:outline-none"
               placeholder="https://yourwebsite.com"
             />
           </div>
 
           {/* Service Interest */}
           <div>
-            <label htmlFor="service" className="block text-sm font-medium text-gray-200 mb-2">
+            <label htmlFor="service" className="mb-2 block text-sm font-medium text-gray-200">
               Service Interest
             </label>
             <select
@@ -319,7 +355,7 @@ export default function ContactForm() {
               name="service"
               value={formData.service}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl bg-miami-dark/60 border border-white/20 text-white focus:outline-none focus:border-miami-cyan transition-colors cursor-pointer"
+              className="bg-miami-dark/60 w-full cursor-pointer rounded-xl border border-white/20 px-4 py-3 text-white transition-colors focus:border-miami-cyan focus:outline-none"
             >
               <option value="">Select a service...</option>
               <option value="local-seo">Local SEO</option>
@@ -334,7 +370,7 @@ export default function ContactForm() {
 
           {/* Budget Range */}
           <div>
-            <label htmlFor="budget" className="block text-sm font-medium text-gray-200 mb-2">
+            <label htmlFor="budget" className="mb-2 block text-sm font-medium text-gray-200">
               Monthly Budget (optional)
             </label>
             <select
@@ -342,7 +378,7 @@ export default function ContactForm() {
               name="budget"
               value={formData.budget}
               onChange={handleChange}
-              className="w-full px-4 py-3 rounded-xl bg-miami-dark/60 border border-white/20 text-white focus:outline-none focus:border-miami-cyan transition-colors cursor-pointer"
+              className="bg-miami-dark/60 w-full cursor-pointer rounded-xl border border-white/20 px-4 py-3 text-white transition-colors focus:border-miami-cyan focus:outline-none"
             >
               <option value="">Select budget range...</option>
               <option value="under-1k">Under $1,000</option>
@@ -354,7 +390,7 @@ export default function ContactForm() {
 
           {/* Message */}
           <div>
-            <label htmlFor="message" className="block text-sm font-medium text-gray-200 mb-2">
+            <label htmlFor="message" className="mb-2 block text-sm font-medium text-gray-200">
               Tell us about your goals <span className="text-miami-pink">*</span>
             </label>
             <textarea
@@ -363,9 +399,9 @@ export default function ContactForm() {
               value={formData.message}
               onChange={handleChange}
               rows={4}
-              className={`w-full px-4 py-3 rounded-xl bg-miami-dark/60 border ${
+              className={`bg-miami-dark/60 w-full rounded-xl border px-4 py-3 ${
                 errors.message ? 'border-red-500' : 'border-white/20'
-              } text-white placeholder-gray-500 focus:outline-none focus:border-miami-cyan transition-colors resize-none`}
+              } resize-none text-white placeholder-gray-500 transition-colors focus:border-miami-cyan focus:outline-none`}
               placeholder="Tell us about your business and SEO goals..."
               aria-invalid={!!errors.message}
               aria-describedby={errors.message ? 'message-error' : undefined}
@@ -382,13 +418,9 @@ export default function ContactForm() {
             )}
           </div>
 
-          {/* Cloudflare Turnstile CAPTCHA */}
+          {/* Cloudflare Turnstile CAPTCHA - rendered after hydration */}
           <div className="flex justify-center">
-            <div
-              className="cf-turnstile"
-              data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}
-              data-theme="dark"
-            ></div>
+            <div ref={turnstileRef} className="cf-turnstile"></div>
           </div>
 
           {/* Honeypot (hidden spam protection) */}
@@ -409,15 +441,15 @@ export default function ContactForm() {
             disabled={isSubmitting}
             whileHover={{ scale: shouldReduceMotion ? 1 : 1.02 }}
             whileTap={{ scale: shouldReduceMotion ? 1 : 0.98 }}
-            className={`w-full py-4 px-6 rounded-xl font-bold text-white text-lg transition-all ${
+            className={`w-full rounded-xl px-6 py-4 text-lg font-bold text-white transition-all ${
               isSubmitting
-                ? 'bg-gray-600 cursor-not-allowed'
+                ? 'cursor-not-allowed bg-gray-600'
                 : 'bg-gradient-to-r from-miami-purple via-miami-pink to-miami-cyan hover:shadow-2xl hover:shadow-miami-pink/50'
             }`}
           >
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
-                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
                   <circle
                     className="opacity-25"
                     cx="12"
@@ -446,11 +478,11 @@ export default function ContactForm() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-6 p-4 rounded-xl bg-green-500/20 border border-green-500/50 text-center"
+            className="mt-6 rounded-xl border border-green-500/50 bg-green-500/20 p-4 text-center"
             role="alert"
           >
-            <div className="text-green-400 text-lg font-bold mb-1">✓ Success!</div>
-            <p className="text-green-200 text-sm">
+            <div className="mb-1 text-lg font-bold text-green-400">✓ Success!</div>
+            <p className="text-sm text-green-200">
               We've received your request. We'll be in touch within 24 hours!
             </p>
           </motion.div>
@@ -461,19 +493,20 @@ export default function ContactForm() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-6 p-4 rounded-xl bg-red-500/20 border border-red-500/50 text-center"
+            className="mt-6 rounded-xl border border-red-500/50 bg-red-500/20 p-4 text-center"
             role="alert"
           >
-            <div className="text-red-400 text-lg font-bold mb-1">Error</div>
-            <p className="text-red-200 text-sm">
+            <div className="mb-1 text-lg font-bold text-red-400">Error</div>
+            <p className="text-sm text-red-200">
               Something went wrong. Please try again or email us directly.
             </p>
           </motion.div>
         )}
 
         {/* Privacy Notice */}
-        <p className="mt-6 text-xs text-gray-400 text-center">
-          By submitting this form, you agree to our privacy policy. We'll never share your information.
+        <p className="mt-6 text-center text-xs text-gray-400">
+          By submitting this form, you agree to our privacy policy. We'll never share your
+          information.
         </p>
       </motion.form>
     </div>
