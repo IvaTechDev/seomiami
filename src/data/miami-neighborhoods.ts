@@ -5,6 +5,8 @@
 export interface Neighborhood {
   id: string;
   name: string;
+  slug: string;
+  description: string;
   activeClients: number;
   avgRankingImprovement: number; // percentage
   coordinates: {
@@ -18,6 +20,8 @@ export const miamiNeighborhoods: Neighborhood[] = [
   {
     id: 'downtown',
     name: 'Downtown Miami',
+    slug: 'downtown-miami',
+    description: 'Financial and cultural hub of Miami.',
     activeClients: 24,
     avgRankingImprovement: 156,
     coordinates: { x: 50, y: 55 },
@@ -26,6 +30,8 @@ export const miamiNeighborhoods: Neighborhood[] = [
   {
     id: 'brickell',
     name: 'Brickell',
+    slug: 'brickell',
+    description: 'Luxury high-rise neighborhood with upscale dining.',
     activeClients: 31,
     avgRankingImprovement: 178,
     coordinates: { x: 52, y: 60 },
@@ -34,6 +40,8 @@ export const miamiNeighborhoods: Neighborhood[] = [
   {
     id: 'coral-gables',
     name: 'Coral Gables',
+    slug: 'coral-gables',
+    description: 'Prestigious neighborhood with Mediterranean-style architecture.',
     activeClients: 19,
     avgRankingImprovement: 142,
     coordinates: { x: 42, y: 65 },
@@ -42,6 +50,8 @@ export const miamiNeighborhoods: Neighborhood[] = [
   {
     id: 'wynwood',
     name: 'Wynwood',
+    slug: 'wynwood',
+    description: 'Art district known for murals and creative businesses.',
     activeClients: 27,
     avgRankingImprovement: 189,
     coordinates: { x: 55, y: 50 },
@@ -50,6 +60,8 @@ export const miamiNeighborhoods: Neighborhood[] = [
   {
     id: 'miami-beach',
     name: 'Miami Beach',
+    slug: 'miami-beach',
+    description: 'World-famous beach destination with vibrant nightlife.',
     activeClients: 42,
     avgRankingImprovement: 203,
     coordinates: { x: 75, y: 48 },
@@ -58,6 +70,8 @@ export const miamiNeighborhoods: Neighborhood[] = [
   {
     id: 'coconut-grove',
     name: 'Coconut Grove',
+    slug: 'coconut-grove',
+    description: 'Bohemian waterfront neighborhood with lush greenery.',
     activeClients: 16,
     avgRankingImprovement: 134,
     coordinates: { x: 48, y: 70 },
@@ -66,6 +80,8 @@ export const miamiNeighborhoods: Neighborhood[] = [
   {
     id: 'little-havana',
     name: 'Little Havana',
+    slug: 'little-havana',
+    description: 'Cultural heart of Miami with Cuban heritage.',
     activeClients: 22,
     avgRankingImprovement: 167,
     coordinates: { x: 45, y: 58 },
@@ -74,6 +90,8 @@ export const miamiNeighborhoods: Neighborhood[] = [
   {
     id: 'design-district',
     name: 'Design District',
+    slug: 'design-district',
+    description: 'Luxury shopping and art destination.',
     activeClients: 18,
     avgRankingImprovement: 145,
     coordinates: { x: 57, y: 48 },
@@ -82,6 +100,8 @@ export const miamiNeighborhoods: Neighborhood[] = [
   {
     id: 'aventura',
     name: 'Aventura',
+    slug: 'aventura',
+    description: 'Upscale shopping and residential area.',
     activeClients: 25,
     avgRankingImprovement: 171,
     coordinates: { x: 60, y: 25 },
@@ -90,6 +110,8 @@ export const miamiNeighborhoods: Neighborhood[] = [
   {
     id: 'key-biscayne',
     name: 'Key Biscayne',
+    slug: 'key-biscayne',
+    description: 'Island paradise with beautiful beaches.',
     activeClients: 13,
     avgRankingImprovement: 128,
     coordinates: { x: 65, y: 75 },

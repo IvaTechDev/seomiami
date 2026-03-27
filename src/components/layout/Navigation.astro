@@ -45,7 +45,14 @@ const navLinks = [
       </ul>
 
       <!-- Desktop CTA -->
-      <div class="hidden lg:block">
+      <div class="hidden lg:flex items-center gap-3">
+        <a
+          href="tel:+17862977977"
+          class="flex items-center gap-2 px-4 py-2 rounded-lg border border-miami-cyan/40 text-miami-cyan hover:bg-miami-cyan/10 hover:border-miami-cyan transition-all duration-200 text-sm font-semibold"
+        >
+          <Phone className="w-4 h-4" />
+          (786) 297-7977
+        </a>
         <Button variant="primary" size="md" href="#contact" className="group">
           Free Audit
           <Sparkles className="w-4 h-4 ml-2 group-hover:rotate-12 transition-transform" />
@@ -111,7 +118,7 @@ const navLinks = [
         <div class="flex flex-col gap-4 text-gray-400">
           <div class="flex items-center gap-3">
             <Phone className="w-5 h-5 text-miami-cyan" />
-            <span>(305) 555-RANK</span>
+            <a href="tel:+17862977977" class="hover:text-white transition-colors">(786) 297-7977</a>
           </div>
           <div class="flex items-center gap-3">
             <Mail className="w-5 h-5 text-miami-purple" />

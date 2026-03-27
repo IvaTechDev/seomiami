@@ -14,12 +14,14 @@ interface Props {
   variant?: 'glass' | 'glass-hover' | 'solid';
   padding?: 'none' | 'sm' | 'md' | 'lg';
   class?: string;
+  style?: string;
 }
 
-const { 
-  variant = 'glass', 
+const {
+  variant = 'glass',
   padding = 'md',
-  class: className = ''
+  class: className = '',
+  style = ''
 } = Astro.props;
 
 // Base styles for all cards
@@ -44,7 +46,7 @@ const variantStyles = {
 const cardClasses = `${baseStyles} ${paddingStyles[padding]} ${variantStyles[variant]} ${className}`;
 ---
 
-<div class={cardClasses}>
+<div class={cardClasses} style={style}>
   <slot />
 </div>
 

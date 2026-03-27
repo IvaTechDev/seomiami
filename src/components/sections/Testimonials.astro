@@ -22,7 +22,7 @@ const totalReviewsString = totalReviews.toString();
 <Section id="testimonials">
   <Container>
     <div class="text-center mb-16">
-      <Heading level="h2" as="h2" className="mb-4">
+      <Heading level="h2" class="mb-4">
         Trusted by <span class="text-miami-cyan">500+ Miami Businesses</span>
       </Heading>
       <p class="text-xl text-slate-300 max-w-3xl mx-auto mb-8">
@@ -47,7 +47,7 @@ const totalReviewsString = totalReviews.toString();
         </div>
 
         {/* Verified Badge */}
-        <Badge variant="success" className="text-sm">
+        <Badge variant="success" class="text-sm">
           <CheckCircle size="36" />
           Verified Reviews
         </Badge>
@@ -56,10 +56,7 @@ const totalReviewsString = totalReviews.toString();
 
     {/* Testimonial Carousel */}
     <div class="mb-16">
-      <!-- <TestimonialCarousel client:visible /> -->
-      <div class="text-center p-8 bg-miami-dark/40 rounded-xl border border-white/10">
-        <p class="text-gray-300">Testimonial Carousel - Temporarily disabled for SSR debugging</p>
-      </div>
+      <TestimonialCarousel client:visible />
     </div>
 
     {/* Trust Badges */}
