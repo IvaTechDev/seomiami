@@ -3,24 +3,11 @@
  * Integrates with Resend API for email delivery
  */
 
-import {
-  ContactFormError,
-  SpamError,
-  EmailDeliveryError,
-  createErrorResponse,
-} from './errors';
+import { ContactFormError, SpamError, EmailDeliveryError, createErrorResponse } from './errors';
 import { validateAndSanitizeFormData } from './validator';
 import type { ContactFormData } from './validator';
-import {
-  generateHTMLEmail,
-  generatePlainTextEmail,
-  generateEmailSubject,
-} from './email-template';
-import {
-  enforceRateLimit,
-  getClientIP,
-  createRateLimitKey,
-} from '../rate-limiter';
+import { generateHTMLEmail, generatePlainTextEmail, generateEmailSubject } from './email-template';
+import { enforceRateLimit, getClientIP, createRateLimitKey } from '../rate-limiter';
 
 // Environment variables interface
 interface Env {
@@ -33,6 +20,21 @@ interface Env {
   TURNSTILE_SECRET_KEY: string;
 }
 
+// Allowed origins for CORS (comma-separated in ALLOWED_ORIGIN env var)
+function getAllowedOrigin(requestOrigin: string | null, envAllowedOrigin?: string): string {
+  if (!envAllowedOrigin) return '*';
+
+  // Support comma-separated list of allowed origins
+  const allowedOrigins = envAllowedOrigin.split(',').map((o) => o.trim());
+
+  if (requestOrigin && allowedOrigins.includes(requestOrigin)) {
+    return requestOrigin;
+  }
+
+  // Return first allowed origin as default
+  return allowedOrigins[0];
+}
+
 // Success response interface
 interface SuccessResponse {
   success: true;
@@ -42,9 +44,9 @@ interface SuccessResponse {
 /**
  * Handle CORS preflight requests
  */
-function handleCORS(origin: string, allowedOrigin?: string): Response {
-  const corsOrigin = allowedOrigin || '*';
-  
+function handleCORS(requestOrigin: string | null | undefined, allowedOrigin?: string): Response {
+  const corsOrigin = getAllowedOrigin(requestOrigin ?? null, allowedOrigin);
+
   return new Response(null, {
     status: 204,
     headers: {
@@ -59,9 +61,12 @@ function handleCORS(origin: string, allowedOrigin?: string): Response {
 /**
  * Get CORS headers
  */
-function getCORSHeaders(allowedOrigin?: string): Record<string, string> {
-  const corsOrigin = allowedOrigin || '*';
-  
+function getCORSHeaders(
+  requestOrigin: string | null | undefined,
+  allowedOrigin?: string
+): Record<string, string> {
+  const corsOrigin = getAllowedOrigin(requestOrigin ?? null, allowedOrigin);
+
   return {
     'Access-Control-Allow-Origin': corsOrigin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -83,7 +88,7 @@ async function sendEmail(
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
-      'Authorization': `Bearer ${apiKey}`,
+      Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -133,10 +138,7 @@ async function verifyTurnstileToken(token: string, secret: string): Promise<bool
 /**
  * Process contact form submission
  */
-async function handleContactForm(
-  request: Request,
-  env: Env
-): Promise<Response> {
+async function handleContactForm(request: Request, env: Env): Promise<Response> {
   try {
     // Check method
     if (request.method !== 'POST') {
@@ -176,7 +178,10 @@ async function handleContactForm(
     const formData: ContactFormData = validateAndSanitizeFormData(requestData);
 
     // Verify Turnstile token
-    const isValidToken = await verifyTurnstileToken(formData.turnstileToken, env.TURNSTILE_SECRET_KEY);
+    const isValidToken = await verifyTurnstileToken(
+      formData.turnstileToken,
+      env.TURNSTILE_SECRET_KEY
+    );
     if (!isValidToken) {
       throw new ContactFormError('CAPTCHA verification failed', 400);
     }
@@ -224,7 +229,7 @@ async function handleContactForm(
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        ...getCORSHeaders(env.ALLOWED_ORIGIN),
+        ...getCORSHeaders(request.headers.get('Origin'), env.ALLOWED_ORIGIN),
         'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
       },
     });
@@ -234,10 +239,10 @@ async function handleContactForm(
 
     // Return appropriate error response
     const errorResponse = createErrorResponse(error as Error);
-    
+
     // Add CORS headers to error response
     const headers = new Headers(errorResponse.headers);
-    const corsHeaders = getCORSHeaders(env.ALLOWED_ORIGIN);
+    const corsHeaders = getCORSHeaders(request.headers.get('Origin'), env.ALLOWED_ORIGIN);
     Object.entries(corsHeaders).forEach(([key, value]) => {
       headers.set(key, value);
     });
@@ -258,7 +263,7 @@ export default {
 
     // Handle CORS preflight
     if (request.method === 'OPTIONS') {
-      return handleCORS(request.headers.get('Origin') || '', env.ALLOWED_ORIGIN);
+      return handleCORS(request.headers.get('Origin'), env.ALLOWED_ORIGIN);
     }
 
     // Route to contact form handler
@@ -269,7 +274,7 @@ export default {
     // 404 for other routes
     return new Response('Not Found', {
       status: 404,
-      headers: getCORSHeaders(env.ALLOWED_ORIGIN),
+      headers: getCORSHeaders(request.headers.get('Origin'), env.ALLOWED_ORIGIN),
     });
   },
 };
