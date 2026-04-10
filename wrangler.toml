@@ -10,7 +10,6 @@ compatibility_date = "2025-01-01"
 
 # Worker settings
 workers_dev = true
-route = ""
 # Production routes - covers both apex and www
 routes = [ { pattern = "seoservicesmiami.com/api/contact", zone_name = "seoservicesmiami.com" }, { pattern = "www.seoservicesmiami.com/api/contact", zone_name = "seoservicesmiami.com" } ]
 
@@ -38,9 +37,11 @@ vars = { FORM_SUBMISSION_EMAIL = "dev@seo.kr.ua", ALLOWED_ORIGIN = "http://local
 
 # Production configuration
 [env.production]
-vars = { FORM_SUBMISSION_EMAIL = "info@seo.kr.ua", ALLOWED_ORIGIN = "https://seoservicesmiami.com,https://www.seoservicesmiami.com" }
+name = "seo-contact-form"
+vars = { FORM_SUBMISSION_EMAIL = "info@seo.kr.ua", ALLOWED_ORIGIN = "https://seoservicesmiami.com,https://www.seoservicesmiami.com", RATE_LIMIT_MAX = "5", RATE_LIMIT_WINDOW = "3600", TURNSTILE_SECRET_KEY="0x4AAAAAACFyt2ZktPhBpEeVuxOzU1q5yU8" }
 # Production routes
 routes = [ { pattern = "seoservicesmiami.com/api/contact", zone_name = "seoservicesmiami.com" }, { pattern = "www.seoservicesmiami.com/api/contact", zone_name = "seoservicesmiami.com" } ]
+# Note: Set TURNSTILE_SECRET_KEY via: wrangler secret put TURNSTILE_SECRET_KEY --env production
 
 # Build configuration
 [build]

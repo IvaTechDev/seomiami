@@ -22,13 +22,21 @@ import { Users, Award, Star, TrendingUp, CheckCircle, Shield, Lock } from 'lucid
 
     <!-- Client Logos Grid -->
     <div class="mb-16">
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-50 hover:opacity-70 transition-opacity">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
         {
-          Array.from({ length: 6 }).map((_, i) => (
-            <div class="relative w-32 h-20 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center group hover:bg-white/10 transition-all duration-300">
-              <div class="text-white/40 text-xs font-semibold group-hover:text-white/60 transition-colors">
-                CLIENT {String(i + 1)}
-              </div>
+          [
+            { src: '/images/clients/client-01.webp', alt: 'Client 1' },
+            { src: '/images/clients/client-02.webp', alt: 'Client 2' },
+            { src: '/images/clients/client-03.webp', alt: 'Client 3' },
+            { src: '/images/clients/client-04.webp', alt: 'Client 4' },
+          ].map((client) => (
+            <div class="client-logo relative w-36 h-20 flex items-center justify-center px-4">
+              <img
+                src={client.src}
+                alt={client.alt}
+                loading="lazy"
+                class="max-h-full max-w-full object-contain brightness-0 invert opacity-40 hover:opacity-90 transition-all duration-500"
+              />
             </div>
           ))
         }

@@ -31,20 +31,20 @@ export function validateEmail(email: string): boolean {
  */
 export function validatePhone(phone: string): boolean {
   if (!phone || phone.trim() === '') return true; // optional field
-  
+
   // Remove all non-digit characters
   const digitsOnly = phone.replace(/\D/g, '');
-  
+
   // Check if it has 10 or 11 digits (11 for +1 prefix)
   if (digitsOnly.length < 10 || digitsOnly.length > 11) {
     return false;
   }
-  
+
   // If 11 digits, first digit should be 1 (country code)
   if (digitsOnly.length === 11 && digitsOnly[0] !== '1') {
     return false;
   }
-  
+
   return true;
 }
 
@@ -53,7 +53,7 @@ export function validatePhone(phone: string): boolean {
  */
 export function validateURL(url: string): boolean {
   if (!url || url.trim() === '') return true; // optional field
-  
+
   try {
     const urlObj = new URL(url);
     return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
@@ -67,7 +67,7 @@ export function validateURL(url: string): boolean {
  */
 export function sanitizeString(input: string): string {
   if (!input) return '';
-  
+
   return input
     .trim()
     .replace(/[<>]/g, '') // Remove < and > to prevent HTML injection
@@ -79,7 +79,7 @@ export function sanitizeString(input: string): string {
  */
 export function sanitizeName(name: string): string {
   if (!name) return '';
-  
+
   return name
     .trim()
     .replace(/[^a-zA-Z\s\-']/g, '')
@@ -91,11 +91,8 @@ export function sanitizeName(name: string): string {
  */
 export function sanitizeEmail(email: string): string {
   if (!email) return '';
-  
-  return email
-    .trim()
-    .toLowerCase()
-    .slice(0, 254); // Max email length per RFC 5321
+
+  return email.trim().toLowerCase().slice(0, 254); // Max email length per RFC 5321
 }
 
 /**
@@ -118,12 +115,7 @@ export function validateService(service: string): boolean {
 /**
  * Validate budget selection
  */
-const VALID_BUDGETS = [
-  'under-1k',
-  '1k-5k',
-  '5k-10k',
-  '10k-plus',
-];
+const VALID_BUDGETS = ['under-1k', '1k-5k', '5k-10k', '10k-plus'];
 
 export function validateBudget(budget: string): boolean {
   if (!budget || budget.trim() === '') return true; // optional field
@@ -146,11 +138,11 @@ export function validateAndSanitizeFormData(data: any): ContactFormData {
   if (!data.name || typeof data.name !== 'string') {
     throw new ValidationError('Name is required', 'name');
   }
-  
+
   if (!data.email || typeof data.email !== 'string') {
     throw new ValidationError('Email is required', 'email');
   }
-  
+
   if (!data.message || typeof data.message !== 'string') {
     throw new ValidationError('Message is required', 'message');
   }
@@ -188,8 +180,8 @@ export function validateAndSanitizeFormData(data: any): ContactFormData {
     throw new ValidationError('Please enter a valid URL (e.g., https://example.com)', 'website');
   }
 
-  // Validate service
-  if (!validateService(sanitizedData.service)) {
+  // Validate service if provided
+  if (sanitizedData.service && !validateService(sanitizedData.service)) {
     throw new ValidationError('Please select a valid service', 'service');
   }
 

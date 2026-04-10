@@ -48,6 +48,7 @@ export default function ContactForm() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [turnstileReady, setTurnstileReady] = useState(false);
   const shouldReduceMotion = useReducedMotion();
   const turnstileRef = useRef<HTMLDivElement>(null);
 
@@ -61,6 +62,7 @@ export default function ContactForm() {
           sitekey: siteKey,
           theme: 'dark',
         });
+        setTurnstileReady(true);
       }
     };
 
@@ -68,10 +70,11 @@ export default function ContactForm() {
       renderWidget();
     } else {
       const script = document.createElement('script');
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
       script.async = true;
       script.defer = true;
       script.onload = renderWidget;
+      script.onerror = () => console.error('Failed to load Turnstile script');
       document.head.appendChild(script);
     }
   }, []);
@@ -155,9 +158,10 @@ export default function ContactForm() {
     }
 
     // Get Turnstile token
-    const turnstileToken = (
-      document.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement
-    )?.value;
+    const turnstileInput = document.querySelector(
+      '[name="cf-turnstile-response"]'
+    ) as HTMLInputElement | null;
+    const turnstileToken = turnstileInput?.value || '';
     if (!turnstileToken) {
       setSubmitStatus('error');
       return;
@@ -210,7 +214,7 @@ export default function ContactForm() {
           turnstileToken: '',
         });
         setSubmitStatus('idle');
-      }, 3000);
+      }, 10000);
     } catch (error) {
       console.error('Form submission error:', error);
       setSubmitStatus('error');
@@ -438,16 +442,40 @@ export default function ContactForm() {
           {/* Submit Button */}
           <motion.button
             type="submit"
-            disabled={isSubmitting}
-            whileHover={{ scale: shouldReduceMotion ? 1 : 1.02 }}
-            whileTap={{ scale: shouldReduceMotion ? 1 : 0.98 }}
+            disabled={isSubmitting || !turnstileReady}
+            whileHover={{
+              scale: shouldReduceMotion ? 1 : isSubmitting || !turnstileReady ? 1 : 1.02,
+            }}
+            whileTap={{
+              scale: shouldReduceMotion ? 1 : isSubmitting || !turnstileReady ? 1 : 0.98,
+            }}
             className={`w-full rounded-xl px-6 py-4 text-lg font-bold text-white transition-all ${
-              isSubmitting
+              isSubmitting || !turnstileReady
                 ? 'cursor-not-allowed bg-gray-600'
                 : 'bg-gradient-to-r from-miami-purple via-miami-pink to-miami-cyan hover:shadow-2xl hover:shadow-miami-pink/50'
             }`}
           >
-            {isSubmitting ? (
+            {!turnstileReady ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                Loading...
+              </span>
+            ) : isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
                 <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
                   <circle
